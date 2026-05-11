@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>LIT1a Rhyme · EN · Spring 2026 Item Dashboard</title>
+<style>
+  :root {
+    --bg: #f7f8fa;
+    --panel: #ffffff;
+    --text: #1f2937;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+    --border-strong: #d1d5db;
+    --header-bg: #f3f4f6;
+    --row-hover: #fafbfc;
+
+    --green-bg: #d1fae5;
+    --green-fg: #047857;
+    --red-bg:   #fee2e2;
+    --red-fg:   #b91c1c;
+    --amber-bg: #fef3c7;
+    --amber-fg: #b45309;
+    --blue-bg:  #dbeafe;
+    --blue-fg:  #1d4ed8;
+    --gray-bg:  #f3f4f6;
+    --gray-fg:  #374151;
+
+    --accent: #2563eb;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto,
+      "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 40px 32px 80px;
+  }
+
+  header.hero h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0 0 6px;
+    letter-spacing: -0.01em;
+  }
+
+  header.hero .subtitle {
+    color: var(--muted);
+    font-size: 15px;
+    margin-bottom: 6px;
+  }
+
+  header.hero .meta {
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  /* Summary cards */
+  .summary {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 16px;
+    margin: 28px 0 32px;
+  }
+  .card.highlight {
+    background: linear-gradient(180deg, #fff5f5 0%, #fff 100%);
+    border-color: #fecaca;
+  }
+  .card.highlight .value { color: var(--red-fg); }
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 18px;
+  }
+  .card .label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    font-weight: 600;
+  }
+  .card .value {
+    font-size: 24px;
+    font-weight: 700;
+    margin-top: 6px;
+  }
+  .card .sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  /* Controls */
+  .controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .controls .left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .controls .legend {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    color: var(--muted);
+    font-size: 12px;
+  }
+  .swatch {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .swatch span.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    display: inline-block;
+  }
+
+  /* Table panel */
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 14px;
+  }
+
+  thead th {
+    background: var(--header-bg);
+    color: var(--gray-fg);
+    text-align: left;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    user-select: none;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  thead th .arrow {
+    color: var(--muted);
+    margin-left: 4px;
+    font-size: 10px;
+  }
+  thead th[data-sort="active-asc"] .arrow::after  { content: "▲"; color: var(--accent); }
+  thead th[data-sort="active-desc"] .arrow::after { content: "▼"; color: var(--accent); }
+
+  tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 120ms ease;
+  }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: var(--row-hover); }
+
+  tbody td {
+    padding: 14px 16px;
+    vertical-align: middle;
+  }
+
+  .item-name {
+    font-weight: 700;
+    font-size: 15px;
+  }
+
+  .screenshot-cell {
+    width: 130px;
+  }
+  .screenshot {
+    width: 120px;
+    height: 84px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: #fff center/cover no-repeat;
+    cursor: zoom-in;
+    transition: transform 120ms ease, box-shadow 120ms ease;
+  }
+  .screenshot:hover {
+    transform: scale(1.04);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.10);
+  }
+
+  /* Pills */
+  .pill {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 13px;
+    min-width: 52px;
+    text-align: center;
+  }
+  .pill.red    { background: var(--red-bg);   color: var(--red-fg); }
+  .pill.amber  { background: var(--amber-bg); color: var(--amber-fg); }
+  .pill.green  { background: var(--green-bg); color: var(--green-fg); }
+  .pill.blue   { background: var(--blue-bg);  color: var(--blue-fg); }
+  .pill.gray   { background: var(--gray-bg);  color: var(--gray-fg); }
+
+  .num { font-variant-numeric: tabular-nums; }
+  .muted { color: var(--muted); }
+  .dash { color: var(--muted); }
+
+  /* Modal */
+  .modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.7);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 24px;
+  }
+  .modal.open { display: flex; }
+  .modal img {
+    max-width: 90vw;
+    max-height: 90vh;
+    border-radius: 10px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+  }
+  .modal .close {
+    position: absolute;
+    top: 16px;
+    right: 24px;
+    color: #fff;
+    font-size: 28px;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    line-height: 1;
+  }
+
+  .notes {
+    margin-top: 18px;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  .notes code {
+    background: #eef0f3;
+    color: #111;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 11.5px;
+  }
+
+  @media (max-width: 1100px) {
+    .summary { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+  @media (max-width: 700px) {
+    .summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="hero">
+    <h1>LIT1a · Rhyme · English</h1>
+    <p class="subtitle">Item-level psychometrics from the Spring 2026 administration</p>
+    <p class="meta">N = 380 (item-level percent correct) · 420 starters · Raw Alpha = 0.707</p>
+  </header>
+
+  <section class="summary">
+    <div class="card highlight">
+      <div class="label">Exit Rate</div>
+      <div class="value">26.0%</div>
+      <div class="sub">(420 − 311) / 420 · 109 children exited</div>
+    </div>
+    <div class="card">
+      <div class="label">Started</div>
+      <div class="value">420</div>
+      <div class="sub">total children who began</div>
+    </div>
+    <div class="card">
+      <div class="label">Completed</div>
+      <div class="value">311</div>
+      <div class="sub">reached the end after q18</div>
+    </div>
+    <div class="card">
+      <div class="label">Mean % Correct</div>
+      <div class="value">35.7%</div>
+      <div class="sub">across the 18 scored items</div>
+    </div>
+    <div class="card">
+      <div class="label">Raw Alpha</div>
+      <div class="value">0.707</div>
+      <div class="sub">internal consistency</div>
+    </div>
+  </section>
+
+  <div class="controls">
+    <div class="left">
+      <strong style="font-size:14px;">Item-level table</strong>
+      <span class="muted" style="font-size:12px;">click any column header to sort</span>
+    </div>
+    <div class="legend">
+      <span class="swatch"><span class="dot" style="background:#fca5a5"></span>% correct &lt; 35</span>
+      <span class="swatch"><span class="dot" style="background:#fcd34d"></span>35–60</span>
+      <span class="swatch"><span class="dot" style="background:#6ee7b7"></span>&gt; 60</span>
+    </div>
+  </div>
+
+  <div class="panel">
+    <table id="itemsTable">
+      <thead>
+        <tr>
+          <th data-key="num" data-type="num">Item <span class="arrow"></span></th>
+          <th>Screenshot</th>
+          <th data-key="pct" data-type="num">% Correct <span class="arrow"></span></th>
+          <th data-key="itemRest" data-type="num">Item-Rest <span class="arrow"></span></th>
+          <th data-key="alphaDel" data-type="num">Alpha if Deleted <span class="arrow"></span></th>
+          <th data-key="exits" data-type="num">Exits <span class="arrow"></span></th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+
+  <p class="notes">
+    <strong>About the Exits column.</strong> The raw export reports the <em>last item a child saw</em>.
+    Because a child who left after seeing item <code>X</code> actually exited the app when the <em>next</em> item appeared,
+    every value has been shifted down by one row. We therefore cannot know how many children exited at <code>p01</code>
+    (the first practice item), and the 311 children whose last item was <code>q18</code> are counted as having
+    <em>completed</em> the assessment rather than as exits.
+  </p>
+</div>
+
+<div id="modal" class="modal" role="dialog" aria-modal="true">
+  <button class="close" id="modalClose" aria-label="Close">×</button>
+  <img id="modalImg" alt="" />
+</div>
+
+<script>
+  // Image path (relative to this HTML file)
+  const IMG_BASE = "images";
+
+  // Spring 2026 data for LIT1a EN.
+  // - pct, n        come from "Item-Level Percent Correct"
+  // - itemRest, alphaDel come from "Reliability" (Item-Rest Cor, Omitted Reliability)
+  // - exits         are SHIFTED DOWN BY ONE ROW from the raw "Exit Rates" table,
+  //                 because the raw data reports the *last item seen*, not the
+  //                 item where the child exited. The 311 children whose last
+  //                 item was q18 are treated as having completed.
+  const ITEMS = [
+    { num: "p01", pct: null, n: null, itemRest: null, alphaDel: null, exits: null,
+      note: "Unknown – no data on exits before any item" },
+    { num: "p02", pct: null, n: null, itemRest: null, alphaDel: null, exits: 13 },
+    { num: "q01", pct: 47.4, n: 380, itemRest: 0.181, alphaDel: 0.706, exits: 7  },
+    { num: "q02", pct: 34.2, n: 380, itemRest: 0.301, alphaDel: 0.693, exits: 10 },
+    { num: "q03", pct: 38.9, n: 380, itemRest: 0.218, alphaDel: 0.702, exits: 9  },
+    { num: "q04", pct: 43.7, n: 380, itemRest: 0.191, alphaDel: 0.705, exits: 6  },
+    { num: "q05", pct: 62.4, n: 380, itemRest: 0.062, alphaDel: 0.718, exits: 1  },
+    { num: "q06", pct: 51.3, n: 380, itemRest: 0.371, alphaDel: 0.686, exits: 5  },
+    { num: "q07", pct: 36.3, n: 380, itemRest: 0.255, alphaDel: 0.698, exits: 3  },
+    { num: "q08", pct: 39.5, n: 380, itemRest: 0.283, alphaDel: 0.695, exits: 6  },
+    { num: "q09", pct: 34.2, n: 380, itemRest: 0.104, alphaDel: 0.713, exits: 5  },
+    { num: "q10", pct: 33.2, n: 380, itemRest: 0.171, alphaDel: 0.706, exits: 12 },
+    { num: "q11", pct: 25.0, n: 380, itemRest: 0.415, alphaDel: 0.683, exits: 4  },
+    { num: "q12", pct: 32.4, n: 380, itemRest: 0.458, alphaDel: 0.677, exits: 3  },
+    { num: "q13", pct: 31.6, n: 380, itemRest: 0.338, alphaDel: 0.690, exits: 5  },
+    { num: "q14", pct: 20.5, n: 380, itemRest: 0.470, alphaDel: 0.679, exits: 3  },
+    { num: "q15", pct: 22.9, n: 380, itemRest: 0.473, alphaDel: 0.678, exits: 4  },
+    { num: "q16", pct: 17.0, n: 376, itemRest: 0.248, alphaDel: 0.699, exits: 3  },
+    { num: "q17", pct: 51.9, n: 368, itemRest: 0.280, alphaDel: 0.696, exits: 7  },
+    { num: "q18", pct: 19.2, n: 364, itemRest: 0.486, alphaDel: 0.678, exits: 3  }
+  ];
+
+  /* ----------- rendering ----------- */
+  const tbody = document.getElementById("tbody");
+  const fmtPct = v => v == null ? "—" : v.toFixed(1) + "%";
+  const fmt2   = v => v == null ? "—" : v.toFixed(2);
+  const fmt3   = v => v == null ? "—" : v.toFixed(3);
+
+  function pctClass(v) {
+    if (v == null) return "gray";
+    if (v < 35) return "red";
+    if (v < 60) return "amber";
+    return "green";
+  }
+  function irClass(v) {
+    if (v == null) return "gray";
+    if (v < 0.2) return "red";
+    if (v < 0.3) return "amber";
+    return "green";
+  }
+  function exitClass(v) {
+    if (v == null) return "gray";
+    if (v >= 50) return "red";
+    if (v >= 10) return "amber";
+    return "blue";
+  }
+
+  function render(rows) {
+    tbody.innerHTML = rows.map(it => {
+      const label = it.num.toUpperCase().replace(/^Q0/, "Q").replace(/^P0/, "P");
+      const imgUrl = `${IMG_BASE}/${it.num}.png`;
+      const pctCell = it.pct == null
+        ? `<span class="dash">—</span>`
+        : `<span class="pill ${pctClass(it.pct)} num">${Math.round(it.pct)}%</span>`;
+      const irCell = it.itemRest == null
+        ? `<span class="dash">—</span>`
+        : `<span class="pill ${irClass(it.itemRest)} num">${fmt2(it.itemRest)}</span>`;
+      const alphaCell = it.alphaDel == null
+        ? `<span class="dash">—</span>`
+        : `<span class="num">${fmt3(it.alphaDel)}</span>`;
+      const exitsCell = it.exits == null
+        ? `<span class="dash" title="${it.note || ''}">—</span>`
+        : `<span class="pill ${exitClass(it.exits)} num">${it.exits}</span>`;
+
+      return `
+        <tr>
+          <td class="item-name">${label}</td>
+          <td class="screenshot-cell">
+            <div class="screenshot"
+                 style="background-image:url('${imgUrl}')"
+                 data-img="${imgUrl}"
+                 data-label="${label}"
+                 role="button"
+                 tabindex="0"
+                 aria-label="Open screenshot for ${label}"></div>
+          </td>
+          <td>${pctCell}</td>
+          <td>${irCell}</td>
+          <td>${alphaCell}</td>
+          <td>${exitsCell}</td>
+        </tr>`;
+    }).join("");
+  }
+
+  /* ----------- sorting ----------- */
+  let sortKey = null;
+  let sortDir = "asc";
+
+  function sortBy(key) {
+    if (sortKey === key) {
+      sortDir = sortDir === "asc" ? "desc" : "asc";
+    } else {
+      sortKey = key;
+      // sensible defaults: most metrics are more interesting descending
+      sortDir = (key === "num" || key === "pct" || key === "alphaDel") ? "asc" : "desc";
+    }
+    const sorted = [...ITEMS].sort((a, b) => {
+      let av = a[key], bv = b[key];
+      if (key === "num") {
+        return sortDir === "asc"
+          ? a.num.localeCompare(b.num)
+          : b.num.localeCompare(a.num);
+      }
+      // Nulls always go to the bottom
+      const an = av == null, bn = bv == null;
+      if (an && bn) return 0;
+      if (an) return 1;
+      if (bn) return -1;
+      return sortDir === "asc" ? av - bv : bv - av;
+    });
+    render(sorted);
+    document.querySelectorAll("thead th").forEach(th => {
+      const k = th.dataset.key;
+      if (!k) { th.removeAttribute("data-sort"); return; }
+      th.dataset.sort = k === sortKey ? (sortDir === "asc" ? "active-asc" : "active-desc") : "";
+    });
+  }
+
+  document.querySelectorAll("thead th[data-key]").forEach(th => {
+    th.addEventListener("click", () => sortBy(th.dataset.key));
+  });
+
+  /* ----------- modal ----------- */
+  const modal = document.getElementById("modal");
+  const modalImg = document.getElementById("modalImg");
+  document.getElementById("modalClose").addEventListener("click", () => modal.classList.remove("open"));
+  modal.addEventListener("click", (e) => { if (e.target === modal) modal.classList.remove("open"); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") modal.classList.remove("open"); });
+
+  tbody.addEventListener("click", (e) => {
+    const t = e.target.closest(".screenshot");
+    if (!t) return;
+    modalImg.src = t.dataset.img;
+    modalImg.alt = `Screenshot for ${t.dataset.label}`;
+    modal.classList.add("open");
+  });
+  tbody.addEventListener("keydown", (e) => {
+    if (e.key !== "Enter" && e.key !== " ") return;
+    const t = e.target.closest(".screenshot");
+    if (!t) return;
+    e.preventDefault();
+    modalImg.src = t.dataset.img;
+    modalImg.alt = `Screenshot for ${t.dataset.label}`;
+    modal.classList.add("open");
+  });
+
+  /* initial render: by item-rest descending, like the reference screenshot */
+  sortBy("itemRest");
+</script>
+</body>
+</html>
