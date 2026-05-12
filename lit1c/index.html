@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>LIT1c Segmenting · EN · Spring 2026 Item Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #f7f8fa;
+    --panel: #ffffff;
+    --text: #1f2937;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+    --border-strong: #d1d5db;
+    --header-bg: #f3f4f6;
+    --row-hover: #fafbfc;
+
+    --green-bg: #d1fae5;
+    --green-fg: #047857;
+    --red-bg:   #fee2e2;
+    --red-fg:   #b91c1c;
+    --amber-bg: #fef3c7;
+    --amber-fg: #b45309;
+    --blue-bg:  #dbeafe;
+    --blue-fg:  #1d4ed8;
+    --gray-bg:  #f3f4f6;
+    --gray-fg:  #374151;
+
+    --grade-3yo: #C5ABD3;
+    --grade-4yo: #8FD2E0;
+    --grade-kg:  #7BDAC5;
+
+    --accent: #2563eb;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto,
+      "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 1480px;
+    margin: 0 auto;
+    padding: 40px 32px 80px;
+  }
+
+  header.hero h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0 0 6px;
+    letter-spacing: -0.01em;
+  }
+  header.hero .subtitle {
+    color: var(--muted);
+    font-size: 15px;
+    margin-bottom: 6px;
+  }
+  header.hero .meta {
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  .summary {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 16px;
+    margin: 28px 0 32px;
+  }
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 18px;
+  }
+  .card.highlight {
+    background: linear-gradient(180deg, #fff5f5 0%, #fff 100%);
+    border-color: #fecaca;
+  }
+  .card.highlight .value { color: var(--red-fg); }
+  .card .label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    font-weight: 600;
+  }
+  .card .value {
+    font-size: 24px;
+    font-weight: 700;
+    margin-top: 6px;
+  }
+  .card .sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+  .controls .left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .controls .legend {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    color: var(--muted);
+    font-size: 12px;
+  }
+  .swatch {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .swatch span.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    display: inline-block;
+  }
+
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 14px;
+  }
+
+  thead th {
+    background: var(--header-bg);
+    color: var(--gray-fg);
+    text-align: left;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    user-select: none;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  thead th .arrow {
+    color: var(--muted);
+    margin-left: 4px;
+    font-size: 10px;
+  }
+  thead th[data-sort="active-asc"]  .arrow::after { content: "▲"; color: var(--accent); }
+  thead th[data-sort="active-desc"] .arrow::after { content: "▼"; color: var(--accent); }
+
+  tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 120ms ease;
+  }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: var(--row-hover); }
+  tbody tr.practice { background: #fbfaf7; }
+  tbody tr.practice:hover { background: #f5f3ec; }
+
+  tbody td {
+    padding: 14px 16px;
+    vertical-align: middle;
+  }
+
+  .item-name {
+    font-weight: 700;
+    font-size: 15px;
+  }
+  .practice-tag {
+    margin-left: 6px;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .screenshot-cell { width: 130px; }
+
+  .prompt-cell {
+    max-width: 320px;
+    min-width: 240px;
+  }
+  .prompt {
+    white-space: pre-line;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #1f2937;
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 10px;
+    max-height: 180px;
+    overflow: auto;
+  }
+  .prompt strong.label {
+    font-weight: 700;
+    color: #111827;
+  }
+  .prompt em.tag {
+    display: inline-block;
+    margin-top: 4px;
+    font-style: normal;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    background: #eef0f3;
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+  .screenshot {
+    width: 120px;
+    height: 84px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: #fff center/cover no-repeat;
+    cursor: zoom-in;
+    transition: transform 120ms ease, box-shadow 120ms ease;
+  }
+  .screenshot:hover {
+    transform: scale(1.04);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.10);
+  }
+
+  /* Pills */
+  .pill {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 13px;
+    min-width: 52px;
+    text-align: center;
+  }
+  .pill.red    { background: var(--red-bg);   color: var(--red-fg); }
+  .pill.amber  { background: var(--amber-bg); color: var(--amber-fg); }
+  .pill.green  { background: var(--green-bg); color: var(--green-fg); }
+  .pill.blue   { background: var(--blue-bg);  color: var(--blue-fg); }
+  .pill.gray   { background: var(--gray-bg);  color: var(--gray-fg); }
+
+  /* Grade chips */
+  .grade {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    min-width: 44px;
+    text-align: center;
+    color: #1f2937;
+  }
+  .grade.g-3yo { background: var(--grade-3yo); }
+  .grade.g-4yo { background: var(--grade-4yo); }
+  .grade.g-kg  { background: var(--grade-kg); }
+
+  .num { font-variant-numeric: tabular-nums; }
+  .muted { color: var(--muted); }
+  .dash { color: var(--muted); }
+
+  /* Modal */
+  .modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.7);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 24px;
+  }
+  .modal.open { display: flex; }
+  .modal img {
+    max-width: 90vw;
+    max-height: 90vh;
+    border-radius: 10px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+  }
+  .modal .close {
+    position: absolute;
+    top: 16px;
+    right: 24px;
+    color: #fff;
+    font-size: 28px;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    line-height: 1;
+  }
+
+  .notes {
+    margin-top: 18px;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  .notes code {
+    background: #eef0f3;
+    color: #111;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 11.5px;
+  }
+
+  @media (max-width: 1100px) {
+    .summary { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+  @media (max-width: 700px) {
+    .summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="hero">
+    <h1>LIT1c · Segmenting · English</h1>
+    <p class="subtitle">Item-level psychometrics from the Spring 2026 administration</p>
+    <p class="meta">N = 234 (item-level percent correct, q01) · 307 starters · Raw Alpha = 0.704</p>
+  </header>
+
+  <section class="summary">
+    <div class="card highlight">
+      <div class="label">Exit Rate</div>
+      <div class="value">41.0%</div>
+      <div class="sub">(307 − 181) / 307 · 126 children exited</div>
+    </div>
+    <div class="card">
+      <div class="label">Started</div>
+      <div class="value">307</div>
+      <div class="sub">total children who began</div>
+    </div>
+    <div class="card">
+      <div class="label">Completed</div>
+      <div class="value">181</div>
+      <div class="sub">reached the end after q20</div>
+    </div>
+    <div class="card">
+      <div class="label">Mean % Correct</div>
+      <div class="value">48.3%</div>
+      <div class="sub">across the 20 scored items</div>
+    </div>
+    <div class="card">
+      <div class="label">Raw Alpha</div>
+      <div class="value">0.704</div>
+      <div class="sub">internal consistency</div>
+    </div>
+  </section>
+
+  <div class="controls">
+    <div class="left">
+      <strong style="font-size:14px;">Item-level table</strong>
+      <span class="muted" style="font-size:12px;">click any column header to sort</span>
+    </div>
+    <div class="legend">
+      <span class="swatch"><span class="dot" style="background:var(--grade-3yo)"></span>3YO</span>
+      <span class="swatch"><span class="dot" style="background:var(--grade-4yo)"></span>4YO</span>
+      <span class="swatch"><span class="dot" style="background:var(--grade-kg)"></span>KG</span>
+      <span style="opacity:0.4">|</span>
+      <span class="swatch"><span class="dot" style="background:#fca5a5"></span>% correct &lt; 35</span>
+      <span class="swatch"><span class="dot" style="background:#fcd34d"></span>35–60</span>
+      <span class="swatch"><span class="dot" style="background:#6ee7b7"></span>&gt; 60</span>
+    </div>
+  </div>
+
+  <div class="panel">
+    <table id="itemsTable">
+      <thead>
+        <tr>
+          <th data-key="order" data-type="num">Item <span class="arrow"></span></th>
+          <th data-key="grade" data-type="str">Grade <span class="arrow"></span></th>
+          <th>Screenshot</th>
+          <th>Prompt</th>
+          <th data-key="pct" data-type="num">% Correct <span class="arrow"></span></th>
+          <th data-key="itemRest" data-type="num">Item-Rest <span class="arrow"></span></th>
+          <th data-key="alphaDel" data-type="num">Alpha if Deleted <span class="arrow"></span></th>
+          <th data-key="exits" data-type="num">Exits <span class="arrow"></span></th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+
+  <p class="notes">
+    <strong>About the Exits column.</strong> The raw export reports the <em>last item a child saw</em>.
+    Because a child who left after seeing item <code>X</code> actually exited the app when the <em>next</em> item
+    appeared, every value has been shifted down by one position along the actual administration order
+    (q01 → q02 → … → q10 → p01 → q11 → p02 → q12 → p03 → q13 → p04 → q14 → p05 → q15 → p06 → q16 → q17 → q18 → q19 → q20).
+    We therefore cannot know how many children exited at <code>q01</code> (the first scored item), and the 181 children
+    whose last item was <code>q20</code> are counted as having <em>completed</em> the assessment rather than as exits.
+  </p>
+</div>
+
+<div id="modal" class="modal" role="dialog" aria-modal="true">
+  <button class="close" id="modalClose" aria-label="Close">×</button>
+  <img id="modalImg" alt="" />
+</div>
+
+<script>
+  // Image path (relative to this HTML file)
+  const IMG_BASE = "images";
+
+  // Item prompts copied verbatim from LIT1cOrder.csv (the "Item Prompt" column).
+  // Multi-line strings are preserved as-is; the table renders them with
+  // `white-space: pre-line` so the line breaks show up the way they do in the
+  // source CSV.
+  const PROMPTS = {
+    "p01": `Inst1: Drag the pom pom to the FIRST square.
+Pop
+Yay/Oops: That popom says pop.
+[Practice Question]`,
+    "p02": `Inst1: Drag the pom pom to the FIRST square.
+B Phonics
+Yay/Oops: That popom says /b/.
+[Practice Question]`,
+    "p03": `Inst1: Drag the pom pom to the FIRST square.
+M Phonics
+Yay/Oops: That popom says /m/.
+[Practice Question]`,
+    "p04": `Inst1: Drag the pom pom to the SECOND square.
+Yay: That pom pom says house.
+
+[Practice Question]`,
+    "p05": `Inst1: Drag the pom pom to the second square.
+Yay/Oops: That pom pom says /ace/`,
+    "p06": `Inst1: Drag the pom pom to the second square.
+Yay/Oops: That pom pom says /ad/`,
+
+    "q01": `Inst1: Which words start with the same sound? Tap the pair
+- mouse - beans
+- mouse - hay
+- mouse - mug
+Yay/Oops: Let's do another one!
+[Assessed Question]`,
+    "q02": `Inst1: Which words start with the same sound?
+- nail - pup
+- nail - net
+- nail - cage
+Yay/Oops: Let's do one more!
+[Assessed Question]`,
+    "q03": `Inst1: Which words start with the same sound?
+- soap - fork
+- soap - cake
+- soap - sock
+Yay/Oops: Let's play a new game!
+[Assessed Question]`,
+    "q04": `Inst1: Which monster makes the /n/ sound? Drag it to the square
+V, N, Z, Sh phonics play as they pop up
+Yay/Oops: Let's do another one.
+[Assessed Question]`,
+    "q05": `Inst1: Which monster makes the /z/ sound?
+K, L, Z, D phonics play as they pop up
+Yay/Oops: Keep it up.
+[Assessed Question]`,
+    "q06": `Inst1: Which monster makes the /v/ sound?
+M, R, K, V phonics play as they pop up
+Yay/Oops: Let's play something different.
+[Assessed Question]`,
+    "q07": `Inst1: Which one starts with the sound /sh/? Drag it to Ollo.
+Vase, Car, Fork, Sheep named as they pop up on screen
+Yay/Oops: Keep it up!
+[Assessed Question]`,
+    "q08": `Inst1: Which one starts with the sound /h/?
+Hat, Mouse, Bike, Book named as they pop up on screen
+Yay/Oops: Let's keep playing!
+[Assessed Question]`,
+    "q09": `Inst1: Which one starts with the sound /s/?
+Ring, Sock, Ball, Bus named as they pop up on screen
+Yay/Oops: Let's play again!
+[Assessed Question]`,
+    "q10": `Inst1: Which one starts with the sound /m/?
+Bug, Tape, Moon, Fire named as they pop up on screen
+Yay/Oops: Let's play a new game!
+[Assessed Question]`,
+    "q11": `Inst1: Which pom pom makes the word popcorn? Drag it to the box
+Ball, Toy, Corn named as they pop up on screen
+Yay/Oops: Keep it up.
+[Assessed Question]`,
+    "q12": `Inst1: Which pom pom makes the word boat?
+Ag, Oat, In named as they pop up on screen
+Yay/Oops: Next question!
+[Assessed Question]`,
+    "q13": `Inst1: Which pom pom makes the word mice?
+At, Ice, Ug named as they pop up on screen
+Yay/Oops: Now let's change the order.
+[Assessed Question]`,
+    "q14": `Inst1: Which pom pom makes the word lighthouse? Drag it to the box.
+Dog, Light, Out named as they pop up
+Yay/Oops: Keep it up!
+
+[Practice Question]`,
+    "q15": `Inst1: Which pom pom makes the word face?
+F, N, L phonics play as they pop up
+Yay/Oops: Let's do one more!`,
+    "q16": `Inst1: Which pom pom makes the word sad?
+L, S,  K phonics play as they pop up
+Yay/Oops: Now pay attention!`,
+    "q17": `Inst1: Which pom pom makes the word moon?
+- /r/
+- /m/
+- /v/
+(pompoms appear in random order)
+Inst2: Which pom pom makes the word moon? Drag it to the box.
+Yay/Oops: Let's keep going!`,
+    "q18": `Inst1: Which pom pom makes the word rose?
+- /n/
+- /g/
+- /r/
+(pompoms appear in random order)
+Inst2: Which pom pom makes the word rose? Drag it to the box.
+Yay/Oops: Let's do another one!`,
+    "q19": `Inst1: Which pom poms make the word bike? Drag them to the boxes.
+- /i/
+- /b/
+- /m/
+Yay/Oops: Last question!`,
+    "q20": `Inst1: Which pom poms make the word sun? Drag them to the boxes.
+- /v/
+- /s/
+- /u/
+Yay/Oops: Thanks for playing with me!`
+  };
+
+  function escapeHtml(s) {
+    return s
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+  }
+  // Wrap "Inst1:", "Inst2:", "Yay/Oops:", "Yay:", "Oops:" in bold so the
+  // structure of each prompt reads at a glance.
+  function boldLabels(escaped) {
+    return escaped.replace(
+      /(^|\n)(Inst[12]|Yay\/Oops|Yay|Oops):/g,
+      (_, lead, label) => `${lead}<strong class="label">${label}:</strong>`
+    );
+  }
+  function renderPrompt(num) {
+    const raw = PROMPTS[num];
+    if (!raw) return `<span class="dash">—</span>`;
+    const body = raw
+      .replace(/\s*\[(Practice Question|Assessed Question|Listening)\]\s*$/, "")
+      .trim();
+    return `<div class="prompt">${boldLabels(escapeHtml(body))}</div>`;
+  }
+
+  // Administration order (only items actually shown to / tracked by the child;
+  // m## listening animations are excluded because they don't appear in the
+  // exit-rates table).  Each entry's `exits` is the count from the raw
+  // "last item seen" table for the PREVIOUS item in this order — i.e. the
+  // values have been shifted down by one row so they correspond to the item
+  // at which the child actually exited.
+  //
+  // Source: 2026-05-01 Psychometric Output Khan_April.xlsx · LIT1c_Segmenting EN
+  // Item order: LIT1cOrder.csv
+  //
+  // grade is taken from the suffix on each item id in the Reliability block
+  // (e.g. "LIT1c-EN-q07-4YO" → "4YO").
+  const ITEMS = [
+    // order, item, grade, isPractice, pct, n, itemRest, alphaDel, exits
+    { order:  1, num: "q01", grade: "3YO", practice: false, pct: 55.6, n: 234, itemRest: 0.087, alphaDel: 0.712, exits: null, note: "Unknown – no data on exits before the first scored item" },
+    { order:  2, num: "q02", grade: "3YO", practice: false, pct: 30.3, n: 234, itemRest: 0.169, alphaDel: 0.703, exits: 7 },
+    { order:  3, num: "q03", grade: "3YO", practice: false, pct: 34.6, n: 234, itemRest: 0.334, alphaDel: 0.688, exits: 6 },
+    { order:  4, num: "q04", grade: "3YO", practice: false, pct: 54.3, n: 234, itemRest: 0.239, alphaDel: 0.697, exits: 23 },
+    { order:  5, num: "q05", grade: "3YO", practice: false, pct: 53.0, n: 234, itemRest: 0.385, alphaDel: 0.682, exits: 7 },
+    { order:  6, num: "q06", grade: "3YO", practice: false, pct: 56.4, n: 234, itemRest: 0.271, alphaDel: 0.694, exits: 4 },
+    { order:  7, num: "q07", grade: "4YO", practice: false, pct: 56.8, n: 234, itemRest: 0.180, alphaDel: 0.703, exits: 7 },
+    { order:  8, num: "q08", grade: "4YO", practice: false, pct: 34.2, n: 234, itemRest: 0.416, alphaDel: 0.680, exits: 2 },
+    { order:  9, num: "q09", grade: "4YO", practice: false, pct: 21.4, n: 234, itemRest: 0.474, alphaDel: 0.677, exits: 6 },
+    { order: 10, num: "q10", grade: "4YO", practice: false, pct: 34.2, n: 234, itemRest: 0.364, alphaDel: 0.685, exits: 5 },
+    { order: 11, num: "p01", grade: "4YO", practice: true,  pct: null, n: null, itemRest: null, alphaDel: null, exits: 8 },
+    { order: 12, num: "q11", grade: "4YO", practice: false, pct: 77.4, n: 234, itemRest: 0.257, alphaDel: 0.695, exits: 5 },
+    { order: 13, num: "p02", grade: "KG",  practice: true,  pct: null, n: null, itemRest: null, alphaDel: null, exits: 4 },
+    { order: 14, num: "q12", grade: "KG",  practice: false, pct: 69.7, n: 234, itemRest: 0.294, alphaDel: 0.692, exits: 5 },
+    { order: 15, num: "p03", grade: "KG",  practice: true,  pct: null, n: null, itemRest: null, alphaDel: null, exits: 2 },
+    { order: 16, num: "q13", grade: "KG",  practice: false, pct: 64.5, n: 234, itemRest: 0.215, alphaDel: 0.699, exits: 7 },
+    { order: 17, num: "p04", grade: "4YO", practice: true,  pct: null, n: null, itemRest: null, alphaDel: null, exits: 3 },
+    { order: 18, num: "q14", grade: "4YO", practice: false, pct: 76.9, n: 234, itemRest: 0.248, alphaDel: 0.696, exits: 4 },
+    { order: 19, num: "p05", grade: "KG",  practice: true,  pct: null, n: null, itemRest: null, alphaDel: null, exits: 1 },
+    { order: 20, num: "q15", grade: "KG",  practice: false, pct: 44.0, n: 234, itemRest: 0.312, alphaDel: 0.690, exits: 1 },
+    { order: 21, num: "p06", grade: "KG",  practice: true,  pct: null, n: null, itemRest: null, alphaDel: null, exits: 0 },
+    { order: 22, num: "q16", grade: "KG",  practice: false, pct: 62.8, n: 234, itemRest: 0.289, alphaDel: 0.692, exits: 5 },
+    { order: 23, num: "q17", grade: "KG",  practice: false, pct: 51.3, n: 232, itemRest: 0.387, alphaDel: 0.682, exits: 2 },
+    { order: 24, num: "q18", grade: "KG",  practice: false, pct: 39.7, n: 224, itemRest: 0.186, alphaDel: 0.702, exits: 4 },
+    { order: 25, num: "q19", grade: "KG",  practice: false, pct: 14.5, n: 220, itemRest: 0.269, alphaDel: 0.695, exits: 2 },
+    { order: 26, num: "q20", grade: "KG",  practice: false, pct: 29.4, n: 214, itemRest: 0.117, alphaDel: 0.708, exits: 6 }
+  ];
+
+  /* ----------- rendering ----------- */
+  const tbody = document.getElementById("tbody");
+  const fmt2  = v => v == null ? "—" : v.toFixed(2);
+  const fmt3  = v => v == null ? "—" : v.toFixed(3);
+
+  function pctClass(v) {
+    if (v == null) return "gray";
+    if (v < 35)   return "red";
+    if (v < 60)   return "amber";
+    return "green";
+  }
+  function irClass(v) {
+    if (v == null) return "gray";
+    if (v < 0.2) return "red";
+    if (v < 0.3) return "amber";
+    return "green";
+  }
+  function exitClass(v) {
+    if (v == null) return "gray";
+    if (v >= 50) return "red";
+    if (v >= 10) return "amber";
+    return "blue";
+  }
+  function gradeClass(g) {
+    if (g === "3YO") return "g-3yo";
+    if (g === "4YO") return "g-4yo";
+    if (g === "KG")  return "g-kg";
+    return "";
+  }
+
+  function labelFor(num) {
+    return num.toUpperCase().replace(/^Q0/, "Q").replace(/^P0/, "P");
+  }
+
+  function render(rows) {
+    tbody.innerHTML = rows.map(it => {
+      const label = labelFor(it.num);
+      const imgUrl = `${IMG_BASE}/${it.num}.png`;
+      const pctCell = it.pct == null
+        ? `<span class="dash">—</span>`
+        : `<span class="pill ${pctClass(it.pct)} num">${Math.round(it.pct)}%</span>`;
+      const irCell = it.itemRest == null
+        ? `<span class="dash">—</span>`
+        : `<span class="pill ${irClass(it.itemRest)} num">${fmt2(it.itemRest)}</span>`;
+      const alphaCell = it.alphaDel == null
+        ? `<span class="dash">—</span>`
+        : `<span class="num">${fmt3(it.alphaDel)}</span>`;
+      const exitsCell = it.exits == null
+        ? `<span class="dash" title="${it.note || ''}">—</span>`
+        : `<span class="pill ${exitClass(it.exits)} num">${it.exits}</span>`;
+      const gradeCell = `<span class="grade ${gradeClass(it.grade)}">${it.grade}</span>`;
+      const practiceTag = it.practice ? `<span class="practice-tag">practice</span>` : "";
+
+      return `
+        <tr class="${it.practice ? 'practice' : ''}">
+          <td class="item-name">${label}${practiceTag}</td>
+          <td>${gradeCell}</td>
+          <td class="screenshot-cell">
+            <div class="screenshot"
+                 style="background-image:url('${imgUrl}')"
+                 data-img="${imgUrl}"
+                 data-label="${label}"
+                 role="button"
+                 tabindex="0"
+                 aria-label="Open screenshot for ${label}"></div>
+          </td>
+          <td class="prompt-cell">${renderPrompt(it.num)}</td>
+          <td>${pctCell}</td>
+          <td>${irCell}</td>
+          <td>${alphaCell}</td>
+          <td>${exitsCell}</td>
+        </tr>`;
+    }).join("");
+  }
+
+  /* ----------- sorting ----------- */
+  let sortKey = null;
+  let sortDir = "asc";
+
+  // Grade order: 3YO < 4YO < KG when sorting
+  const GRADE_ORDER = { "3YO": 0, "4YO": 1, "KG": 2 };
+
+  function sortBy(key) {
+    if (sortKey === key) {
+      sortDir = sortDir === "asc" ? "desc" : "asc";
+    } else {
+      sortKey = key;
+      sortDir = (key === "order" || key === "grade" || key === "pct" || key === "alphaDel")
+        ? "asc"
+        : "desc";
+    }
+    const sorted = [...ITEMS].sort((a, b) => {
+      let av = a[key], bv = b[key];
+      if (key === "grade") {
+        const ao = GRADE_ORDER[av] ?? 99;
+        const bo = GRADE_ORDER[bv] ?? 99;
+        return sortDir === "asc" ? ao - bo : bo - ao;
+      }
+      const an = av == null, bn = bv == null;
+      if (an && bn) return 0;
+      if (an) return 1;
+      if (bn) return -1;
+      return sortDir === "asc" ? av - bv : bv - av;
+    });
+    render(sorted);
+    document.querySelectorAll("thead th").forEach(th => {
+      const k = th.dataset.key;
+      if (!k) { th.removeAttribute("data-sort"); return; }
+      th.dataset.sort = k === sortKey ? (sortDir === "asc" ? "active-asc" : "active-desc") : "";
+    });
+  }
+
+  document.querySelectorAll("thead th[data-key]").forEach(th => {
+    th.addEventListener("click", () => sortBy(th.dataset.key));
+  });
+
+  /* ----------- modal ----------- */
+  const modal    = document.getElementById("modal");
+  const modalImg = document.getElementById("modalImg");
+  document.getElementById("modalClose").addEventListener("click", () => modal.classList.remove("open"));
+  modal.addEventListener("click", e => { if (e.target === modal) modal.classList.remove("open"); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape") modal.classList.remove("open"); });
+
+  tbody.addEventListener("click", e => {
+    const t = e.target.closest(".screenshot");
+    if (!t) return;
+    modalImg.src = t.dataset.img;
+    modalImg.alt = `Screenshot for ${t.dataset.label}`;
+    modal.classList.add("open");
+  });
+  tbody.addEventListener("keydown", e => {
+    if (e.key !== "Enter" && e.key !== " ") return;
+    const t = e.target.closest(".screenshot");
+    if (!t) return;
+    e.preventDefault();
+    modalImg.src = t.dataset.img;
+    modalImg.alt = `Screenshot for ${t.dataset.label}`;
+    modal.classList.add("open");
+  });
+
+  /* initial render: by item-rest correlation descending, like LIT1a */
+  sortBy("itemRest");
+</script>
+</body>
+</html>
