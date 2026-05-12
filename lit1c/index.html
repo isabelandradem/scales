@@ -283,6 +283,25 @@
   .grade.g-4yo { background: var(--grade-4yo); }
   .grade.g-kg  { background: var(--grade-kg); }
 
+  /* Question-type chips */
+  .qtype {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 11.5px;
+    line-height: 1.3;
+    white-space: nowrap;
+  }
+  .qtype.t-practice    { background: #f3f4f6; color: #4b5563; }
+  .qtype.t-word-pairs  { background: #fef3c7; color: #92400e; }
+  .qtype.t-monsters    { background: #fce7f3; color: #9d174d; }
+  .qtype.t-starts      { background: #ffedd5; color: #9a3412; }
+  .qtype.t-pp-2nd      { background: #dbeafe; color: #1e40af; }
+  .qtype.t-pp-1st      { background: #ccfbf1; color: #0f766e; }
+  .qtype.t-pp-full     { background: #ede9fe; color: #5b21b6; }
+  .qtype.t-pp-multi    { background: #e0e7ff; color: #3730a3; }
+
   .num { font-variant-numeric: tabular-nums; }
   .muted { color: var(--muted); }
   .dash { color: var(--muted); }
@@ -398,6 +417,7 @@
         <tr>
           <th data-key="order" data-type="num">Item <span class="arrow"></span></th>
           <th data-key="grade" data-type="str">Grade <span class="arrow"></span></th>
+          <th data-key="type" data-type="str">Type <span class="arrow"></span></th>
           <th>Screenshot</th>
           <th>Prompt</th>
           <th data-key="pct" data-type="num">% Correct <span class="arrow"></span></th>
@@ -585,34 +605,48 @@ Yay/Oops: Thanks for playing with me!`
   //
   // grade is taken from the suffix on each item id in the Reliability block
   // (e.g. "LIT1c-EN-q07-4YO" → "4YO").
+  // Question types — categorized from the prompt text in LIT1cOrder.csv.
+  // The `rank` is used purely for column sorting so types group in the order
+  // they appear in the assessment (easier first → harder last).
+  const TYPES = {
+    "practice":   { label: "Practice",          cls: "t-practice",   rank: 0 },
+    "wordPairs":  { label: "Word pairs",        cls: "t-word-pairs", rank: 1 },
+    "monsters":   { label: "Monster sounds",    cls: "t-monsters",   rank: 2 },
+    "startsWith": { label: "Starts with sound", cls: "t-starts",     rank: 3 },
+    "pp2nd":      { label: "Pom pom: 2nd sound", cls: "t-pp-2nd",    rank: 4 },
+    "pp1st":      { label: "Pom pom: 1st sound", cls: "t-pp-1st",    rank: 5 },
+    "ppFull":     { label: "Pom pom: full word", cls: "t-pp-full",   rank: 6 },
+    "ppMulti":    { label: "Pom pom: multi",     cls: "t-pp-multi",  rank: 7 }
+  };
+
   const ITEMS = [
-    // order, item, grade, isPractice, pct, n, itemRest, alphaDel, exits
-    { order:  1, num: "q01", grade: "3YO", practice: false, pct: 55.6, n: 234, itemRest: 0.087, alphaDel: 0.712, exits: null, note: "Unknown – no data on exits before the first scored item" },
-    { order:  2, num: "q02", grade: "3YO", practice: false, pct: 30.3, n: 234, itemRest: 0.169, alphaDel: 0.703, exits: 7 },
-    { order:  3, num: "q03", grade: "3YO", practice: false, pct: 34.6, n: 234, itemRest: 0.334, alphaDel: 0.688, exits: 6 },
-    { order:  4, num: "q04", grade: "3YO", practice: false, pct: 54.3, n: 234, itemRest: 0.239, alphaDel: 0.697, exits: 23 },
-    { order:  5, num: "q05", grade: "3YO", practice: false, pct: 53.0, n: 234, itemRest: 0.385, alphaDel: 0.682, exits: 7 },
-    { order:  6, num: "q06", grade: "3YO", practice: false, pct: 56.4, n: 234, itemRest: 0.271, alphaDel: 0.694, exits: 4 },
-    { order:  7, num: "q07", grade: "4YO", practice: false, pct: 56.8, n: 234, itemRest: 0.180, alphaDel: 0.703, exits: 7 },
-    { order:  8, num: "q08", grade: "4YO", practice: false, pct: 34.2, n: 234, itemRest: 0.416, alphaDel: 0.680, exits: 2 },
-    { order:  9, num: "q09", grade: "4YO", practice: false, pct: 21.4, n: 234, itemRest: 0.474, alphaDel: 0.677, exits: 6 },
-    { order: 10, num: "q10", grade: "4YO", practice: false, pct: 34.2, n: 234, itemRest: 0.364, alphaDel: 0.685, exits: 5 },
-    { order: 11, num: "p01", grade: "4YO", practice: true,  pct: null, n: null, itemRest: null, alphaDel: null, exits: 8 },
-    { order: 12, num: "q11", grade: "4YO", practice: false, pct: 77.4, n: 234, itemRest: 0.257, alphaDel: 0.695, exits: 5 },
-    { order: 13, num: "p02", grade: "KG",  practice: true,  pct: null, n: null, itemRest: null, alphaDel: null, exits: 4 },
-    { order: 14, num: "q12", grade: "KG",  practice: false, pct: 69.7, n: 234, itemRest: 0.294, alphaDel: 0.692, exits: 5 },
-    { order: 15, num: "p03", grade: "KG",  practice: true,  pct: null, n: null, itemRest: null, alphaDel: null, exits: 2 },
-    { order: 16, num: "q13", grade: "KG",  practice: false, pct: 64.5, n: 234, itemRest: 0.215, alphaDel: 0.699, exits: 7 },
-    { order: 17, num: "p04", grade: "4YO", practice: true,  pct: null, n: null, itemRest: null, alphaDel: null, exits: 3 },
-    { order: 18, num: "q14", grade: "4YO", practice: false, pct: 76.9, n: 234, itemRest: 0.248, alphaDel: 0.696, exits: 4 },
-    { order: 19, num: "p05", grade: "KG",  practice: true,  pct: null, n: null, itemRest: null, alphaDel: null, exits: 1 },
-    { order: 20, num: "q15", grade: "KG",  practice: false, pct: 44.0, n: 234, itemRest: 0.312, alphaDel: 0.690, exits: 1 },
-    { order: 21, num: "p06", grade: "KG",  practice: true,  pct: null, n: null, itemRest: null, alphaDel: null, exits: 0 },
-    { order: 22, num: "q16", grade: "KG",  practice: false, pct: 62.8, n: 234, itemRest: 0.289, alphaDel: 0.692, exits: 5 },
-    { order: 23, num: "q17", grade: "KG",  practice: false, pct: 51.3, n: 232, itemRest: 0.387, alphaDel: 0.682, exits: 2 },
-    { order: 24, num: "q18", grade: "KG",  practice: false, pct: 39.7, n: 224, itemRest: 0.186, alphaDel: 0.702, exits: 4 },
-    { order: 25, num: "q19", grade: "KG",  practice: false, pct: 14.5, n: 220, itemRest: 0.269, alphaDel: 0.695, exits: 2 },
-    { order: 26, num: "q20", grade: "KG",  practice: false, pct: 29.4, n: 214, itemRest: 0.117, alphaDel: 0.708, exits: 6 }
+    // order, item, grade, isPractice, pct, n, itemRest, alphaDel, exits, type
+    { order:  1, num: "q01", grade: "3YO", practice: false, pct: 55.6, n: 234, itemRest: 0.087, alphaDel: 0.712, exits: null, type: "wordPairs",  note: "Unknown – no data on exits before the first scored item" },
+    { order:  2, num: "q02", grade: "3YO", practice: false, pct: 30.3, n: 234, itemRest: 0.169, alphaDel: 0.703, exits: 7,  type: "wordPairs"  },
+    { order:  3, num: "q03", grade: "3YO", practice: false, pct: 34.6, n: 234, itemRest: 0.334, alphaDel: 0.688, exits: 6,  type: "wordPairs"  },
+    { order:  4, num: "q04", grade: "3YO", practice: false, pct: 54.3, n: 234, itemRest: 0.239, alphaDel: 0.697, exits: 23, type: "monsters"   },
+    { order:  5, num: "q05", grade: "3YO", practice: false, pct: 53.0, n: 234, itemRest: 0.385, alphaDel: 0.682, exits: 7,  type: "monsters"   },
+    { order:  6, num: "q06", grade: "3YO", practice: false, pct: 56.4, n: 234, itemRest: 0.271, alphaDel: 0.694, exits: 4,  type: "monsters"   },
+    { order:  7, num: "q07", grade: "4YO", practice: false, pct: 56.8, n: 234, itemRest: 0.180, alphaDel: 0.703, exits: 7,  type: "startsWith" },
+    { order:  8, num: "q08", grade: "4YO", practice: false, pct: 34.2, n: 234, itemRest: 0.416, alphaDel: 0.680, exits: 2,  type: "startsWith" },
+    { order:  9, num: "q09", grade: "4YO", practice: false, pct: 21.4, n: 234, itemRest: 0.474, alphaDel: 0.677, exits: 6,  type: "startsWith" },
+    { order: 10, num: "q10", grade: "4YO", practice: false, pct: 34.2, n: 234, itemRest: 0.364, alphaDel: 0.685, exits: 5,  type: "startsWith" },
+    { order: 11, num: "p01", grade: "4YO", practice: true,  pct: null, n: null, itemRest: null, alphaDel: null, exits: 8,  type: "practice"   },
+    { order: 12, num: "q11", grade: "4YO", practice: false, pct: 77.4, n: 234, itemRest: 0.257, alphaDel: 0.695, exits: 5,  type: "pp2nd"      },
+    { order: 13, num: "p02", grade: "KG",  practice: true,  pct: null, n: null, itemRest: null, alphaDel: null, exits: 4,  type: "practice"   },
+    { order: 14, num: "q12", grade: "KG",  practice: false, pct: 69.7, n: 234, itemRest: 0.294, alphaDel: 0.692, exits: 5,  type: "pp2nd"      },
+    { order: 15, num: "p03", grade: "KG",  practice: true,  pct: null, n: null, itemRest: null, alphaDel: null, exits: 2,  type: "practice"   },
+    { order: 16, num: "q13", grade: "KG",  practice: false, pct: 64.5, n: 234, itemRest: 0.215, alphaDel: 0.699, exits: 7,  type: "pp2nd"      },
+    { order: 17, num: "p04", grade: "4YO", practice: true,  pct: null, n: null, itemRest: null, alphaDel: null, exits: 3,  type: "practice"   },
+    { order: 18, num: "q14", grade: "4YO", practice: false, pct: 76.9, n: 234, itemRest: 0.248, alphaDel: 0.696, exits: 4,  type: "pp1st"      },
+    { order: 19, num: "p05", grade: "KG",  practice: true,  pct: null, n: null, itemRest: null, alphaDel: null, exits: 1,  type: "practice"   },
+    { order: 20, num: "q15", grade: "KG",  practice: false, pct: 44.0, n: 234, itemRest: 0.312, alphaDel: 0.690, exits: 1,  type: "pp1st"      },
+    { order: 21, num: "p06", grade: "KG",  practice: true,  pct: null, n: null, itemRest: null, alphaDel: null, exits: 0,  type: "practice"   },
+    { order: 22, num: "q16", grade: "KG",  practice: false, pct: 62.8, n: 234, itemRest: 0.289, alphaDel: 0.692, exits: 5,  type: "pp1st"      },
+    { order: 23, num: "q17", grade: "KG",  practice: false, pct: 51.3, n: 232, itemRest: 0.387, alphaDel: 0.682, exits: 2,  type: "ppFull"     },
+    { order: 24, num: "q18", grade: "KG",  practice: false, pct: 39.7, n: 224, itemRest: 0.186, alphaDel: 0.702, exits: 4,  type: "ppFull"     },
+    { order: 25, num: "q19", grade: "KG",  practice: false, pct: 14.5, n: 220, itemRest: 0.269, alphaDel: 0.695, exits: 2,  type: "ppMulti"    },
+    { order: 26, num: "q20", grade: "KG",  practice: false, pct: 29.4, n: 214, itemRest: 0.117, alphaDel: 0.708, exits: 6,  type: "ppMulti"    }
   ];
 
   /* ----------- rendering ----------- */
@@ -644,6 +678,11 @@ Yay/Oops: Thanks for playing with me!`
     if (g === "KG")  return "g-kg";
     return "";
   }
+  function renderType(key) {
+    const t = TYPES[key];
+    if (!t) return `<span class="dash">—</span>`;
+    return `<span class="qtype ${t.cls}">${t.label}</span>`;
+  }
 
   function labelFor(num) {
     return num.toUpperCase().replace(/^Q0/, "Q").replace(/^P0/, "P");
@@ -666,12 +705,14 @@ Yay/Oops: Thanks for playing with me!`
         ? `<span class="dash" title="${it.note || ''}">—</span>`
         : `<span class="pill ${exitClass(it.exits)} num">${it.exits}</span>`;
       const gradeCell = `<span class="grade ${gradeClass(it.grade)}">${it.grade}</span>`;
+      const typeCell  = renderType(it.type);
       const practiceTag = it.practice ? `<span class="practice-tag">practice</span>` : "";
 
       return `
         <tr class="${it.practice ? 'practice' : ''}">
           <td class="item-name">${label}${practiceTag}</td>
           <td>${gradeCell}</td>
+          <td>${typeCell}</td>
           <td class="screenshot-cell">
             <div class="screenshot"
                  style="background-image:url('${imgUrl}')"
@@ -702,7 +743,7 @@ Yay/Oops: Thanks for playing with me!`
       sortDir = sortDir === "asc" ? "desc" : "asc";
     } else {
       sortKey = key;
-      sortDir = (key === "order" || key === "grade" || key === "pct" || key === "alphaDel")
+      sortDir = (key === "order" || key === "grade" || key === "type" || key === "pct" || key === "alphaDel")
         ? "asc"
         : "desc";
     }
@@ -712,6 +753,13 @@ Yay/Oops: Thanks for playing with me!`
         const ao = GRADE_ORDER[av] ?? 99;
         const bo = GRADE_ORDER[bv] ?? 99;
         return sortDir === "asc" ? ao - bo : bo - ao;
+      }
+      if (key === "type") {
+        const ao = TYPES[av]?.rank ?? 99;
+        const bo = TYPES[bv]?.rank ?? 99;
+        // tiebreak by administration order so items inside a type stay sequential
+        if (ao !== bo) return sortDir === "asc" ? ao - bo : bo - ao;
+        return a.order - b.order;
       }
       const an = av == null, bn = bv == null;
       if (an && bn) return 0;
