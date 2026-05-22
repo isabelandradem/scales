@@ -283,7 +283,7 @@
   .grade.g-4yo { background: var(--grade-4yo); }
   .grade.g-kg  { background: var(--grade-kg); }
 
-  /* Question-type chips */
+  /* Question-type chips (neutral grey) */
   .qtype {
     display: inline-block;
     padding: 4px 10px;
@@ -292,15 +292,9 @@
     font-size: 11.5px;
     line-height: 1.3;
     white-space: nowrap;
+    background: #f3f4f6;
+    color: #4b5563;
   }
-  .qtype.t-practice    { background: #f3f4f6; color: #4b5563; }
-  .qtype.t-word-pairs  { background: #fef3c7; color: #92400e; }
-  .qtype.t-monsters    { background: #fce7f3; color: #9d174d; }
-  .qtype.t-starts      { background: #ffedd5; color: #9a3412; }
-  .qtype.t-pp-2nd      { background: #dbeafe; color: #1e40af; }
-  .qtype.t-pp-1st      { background: #ccfbf1; color: #0f766e; }
-  .qtype.t-pp-full     { background: #ede9fe; color: #5b21b6; }
-  .qtype.t-pp-multi    { background: #e0e7ff; color: #3730a3; }
 
   .num { font-variant-numeric: tabular-nums; }
   .muted { color: var(--muted); }
@@ -417,13 +411,13 @@
         <tr>
           <th data-key="order" data-type="num">Item <span class="arrow"></span></th>
           <th data-key="grade" data-type="str">Grade <span class="arrow"></span></th>
-          <th data-key="type" data-type="str">Type <span class="arrow"></span></th>
           <th>Screenshot</th>
           <th>Prompt</th>
           <th data-key="pct" data-type="num">% Correct <span class="arrow"></span></th>
           <th data-key="itemRest" data-type="num">Item-Rest <span class="arrow"></span></th>
           <th data-key="alphaDel" data-type="num">Alpha if Deleted <span class="arrow"></span></th>
           <th data-key="exits" data-type="num">Exits <span class="arrow"></span></th>
+          <th data-key="type" data-type="str">Type <span class="arrow"></span></th>
         </tr>
       </thead>
       <tbody id="tbody"></tbody>
@@ -712,7 +706,6 @@ Yay/Oops: Thanks for playing with me!`
         <tr class="${it.practice ? 'practice' : ''}">
           <td class="item-name">${label}${practiceTag}</td>
           <td>${gradeCell}</td>
-          <td>${typeCell}</td>
           <td class="screenshot-cell">
             <div class="screenshot"
                  style="background-image:url('${imgUrl}')"
@@ -727,6 +720,7 @@ Yay/Oops: Thanks for playing with me!`
           <td>${irCell}</td>
           <td>${alphaCell}</td>
           <td>${exitsCell}</td>
+          <td>${typeCell}</td>
         </tr>`;
     }).join("");
   }
