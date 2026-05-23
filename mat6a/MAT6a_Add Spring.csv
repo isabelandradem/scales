@@ -1,0 +1,155 @@
+Item ID,AB Test,Item Prompt
+,,
+MAT6aV3-EN-m01,,"Inst: There is one red fish in the tank.
+
+[Listening]"
+MAT6aV3-EN-m02,,"Inst: There are two yellow fish in the tank.
+
+[Listening]"
+MAT6aV3-EN-p01-4YO,,"Inst1: How many fish are there in all? Tap and count them.
+Inst2: Tap all the fish
+Yay: You counted three! Tap me if you ever need help.
+[Practice Question]"
+MAT6aV3-EN-p02-4YO,,"Inst1: How many fish are there in all?
+Inst2: How many fish are in the tank?
+Yay: That's right! There are three fish in all!
+Oops: Hmm. Tap and count the fish.
+2 + 1 = 3
+[Practice Question]"
+MAT6aV3-EN-m03,,"Inst: There is one green fish in the tank.
+
+[Listening]"
+MAT6aV3-EN-m04,,"Inst: There are two purple fish in the tank.
+
+[Listening]"
+MAT6aV3-EN-q01-4YO,,"Inst1: How many fish are there in all?
+Inst2: How many fish are in the tank?
+Yay/Oops: Let's keep playing
+1 + 2 = 3
+[Assessed Question]"
+MAT6aV3-EN-m05,,"Inst: There are two yellow fish in the tank.
+
+[Listening]"
+MAT6aV3-EN-m06,,"Inst: There are two green fish in the tank.
+
+[Listening]"
+MAT6aV3-EN-q02-4YO,,"Inst: How many fish are there in all?
+Inst: How many fish are in the tank?
+Yay/Oops: Keep it up!
+2 + 2 = 4
+[Assessed Question]"
+MAT6aV3-EN-m07,,"Inst: This is Kezie.
+
+[Listening]"
+MAT6aV3-EN-m08,,"Inst: Kezie collects pompoms in her basket.
+
+[Listening]"
+MAT6aV3-EN-q03-4YO,,"Inst1: Kezie had 1 pompom. Then she got 2 more. How many pompoms does she have in all?
+Yay/Oops: Let's play again!
+1 + 2 = 3
+
+[Assessed Question]"
+MAT6aV3-EN-q04-4YO,,"Inst1: Kezie had 2 pompoms. Then she got 2 more. How many pompoms does she have in all?
+Yay/Oops: Keep it up!
+2 + 2 = 4
+
+[Assessed Question]"
+MAT6aV3-EN-m09,,"Inst: Kezie has three yellow dots. She wants five dots.
+
+[Listening]"
+"MAT6aV3-EN-q05-4YO
+
+AB TEST",AB1V1a,"Inst: Show me: How many green dots does Kezie need to have five dots in all? ContentPause3Sec. Press the green button when you're done.
+Yay/Oops: Let's keep going!
+3 + ? = 5
+
+[Assessed Question]"
+MAT6aV3-EN-m10,,"Inst: Kezie has five blue dots. She wants eight dots.
+
+[Listening]"
+MAT6aV3-EN-q06-KG,AB1V2a,"Inst: Show me: How many yellow dots does Kezie need to have eight dots in all? ContentPause3Sec. Press the green button when you're done.
+Yay/Oops: Let's do one more!
+5 + ? = 8
+
+[Assessed Question]"
+MAT6aV3-EN-m11,,"Inst: Kezie has four pink dots. She wants seven dots.
+
+[Listening]"
+MAT6aV3-EN-q07-KG,,"Inst: Show me: How many green dots does Kezie need to have seven dots in all? ContentPause3Sec. Press the green button when you're done.
+Yay/Oops: Let's play a different game!
+4 + ? = 7
+
+[Assessed Question]"
+MAT6aV3-EN-m12,,"Inst: Kezie has three yellow dots. She wants five dots.
+
+[Listening]"
+MAT6aV3-EN-q08-4YO,AB1V1b,"Inst: Show me: How many green dots does Kezie need to have five dots in all? Drag the answer to the basket.
+Yay/Oops: Keep it up!
+3 + ? = 5
+
+[Assessed Question]"
+MAT6aV3-EN-m13,,"Inst: Kezie has four pink dots. She wants five dots.
+
+[Listening]"
+MAT6aV3-EN-q09-4YO,,"Inst1: Show me: How many green dots does Kezie need to have five dots in all? 
+Inst2: Drag the answer to the basket.
+Yay/Oops: Let's keep going!
+4 + ? = 5
+
+[Assessed Question]"
+MAT6aV3-EN-m14,,"Inst: Kezie has five blue dots. She wants eight dots.
+
+[Listening]"
+MAT6aV3-EN-q10-KG,AB1V2a,"Inst1: Show me: How many green dots does Kezie need to have eight dots in all? 
+Inst2: Drag the answer to the basket.
+Yay/Oops: Let's play another game!
+5 + ? = 8
+
+[Assessed Question]"
+MAT6aV3-EN-m15,,"Inst: There are four red fish in the tank.
+
+[Listening]"
+MAT6aV3-EN-m16,,"Inst: There are three yellow fish in the tank.
+
+[Listening]"
+MAT6aV3-EN-q11-KG,,"Inst1: How many fish are there in all?
+Inst2: How many fish are in the tank?
+Yay/Oops: Next question!
+4 + 3 = 7
+[Assessed Question]"
+MAT6aV3-EN-m17,,"Inst: There are two green fish in the tank.
+
+[Listening]"
+MAT6aV3-EN-m18,,"Inst: There are six purple fish in the tank.
+
+[Listening]"
+MAT6aV3-EN-q12-KG,,"Inst1: How many fish are there in all?
+Inst2: How many fish are in the tank?
+Yay/Oops: Let's play a different game!
+2 + 6 = 8
+[Assessed Question]"
+MAT6aV3-EN-q13-KG,,"Inst1: Kezie had 2 pompoms. Then she got 4 more. How many pompoms does she have in all?
+Yay/Oops: Keep it up!
+2 + 4 = 6
+
+[Assessed Question]"
+MAT6aV3-EN-q14-4YO,,"Inst1: Kezie had 3 pompoms. Then she got 2 more. How many pompoms does she have in all?
+Yay/Oops: Let's play a new game!
+3 + 2 = 5
+
+[Assessed Question]"
+MAT6aV3-EN-q15-KG,,"Inst1: What is 1 + 2? Drag the answer to the box.
+Yay/Oops: Keep it up!
+1+2
+
+[Assessed Question]"
+MAT6aV3-EN-q16-KG,,"Inst1: What is 3 + 1? Drag the answer to the box.
+Yay/Oops: Let's do one more!
+3+1
+
+[Assessed Question]"
+MAT6aV3-EN-q17-KG,,"Inst1: What is 4 + 1? Drag the answer to the box.
+Yay/Oops: Thanks for playing with me!
+4+1
+
+[Assessed Question]"

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>LIT1 · Phonological Awareness · Khan Kids Spring 2026</title>
+<title>Khan Kids · Assessment Item Dashboards</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -63,7 +63,7 @@
 
   .cards {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 24px;
   }
 
@@ -171,9 +171,9 @@
 <div class="page">
 
   <header class="hero">
-    <div class="eyebrow">Khan Kids · Spring 2026 Psychometrics</div>
-    <h1>LIT1</h1>
-    <p>Phonological Awareness · Item-level data.<br>Pick an assessment to open its dashboard.</p>
+    <div class="eyebrow">Khan Kids · Psychometrics</div>
+    <h1>Assessment Dashboards</h1>
+    <p>Item-level data for literacy and math assessments.<br>Pick an assessment to open its dashboard.</p>
   </header>
 
   <div class="cards">
@@ -211,10 +211,26 @@
       <span class="cta">Open dashboard <span class="arrow">→</span></span>
     </a>
 
+    <a class="card" href="mat6a/" style="--card-accent: #ea580c;">
+      <div class="code">MAT6a · English</div>
+      <h2>Addition</h2>
+      <p class="blurb">
+        Children count, solve word problems, and find missing addends.
+        17 scored items in Spring · 18 in Fall, with a season toggle on the dashboard.
+      </p>
+      <div class="stats">
+        <div class="stat"><div class="label">Started</div><div class="value">291</div></div>
+        <div class="stat"><div class="label">Completed</div><div class="value">212</div></div>
+        <div class="stat"><div class="label">Exit Rate</div><div class="value">27.1%</div></div>
+        <div class="stat"><div class="label">Alpha</div><div class="value">0.748</div></div>
+      </div>
+      <span class="cta">Open dashboard <span class="arrow">→</span></span>
+    </a>
+
   </div>
 
   <footer>
-    Source: <em>2026-05-01 Psychometric Output Khan_April.xlsx</em> · Spring 2026 administration
+    Literacy source: <em>2026-05-01 Psychometric Output Khan_April.xlsx</em> · Spring 2026 administration
   </footer>
 </div>
 </body>
