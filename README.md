@@ -12,6 +12,7 @@ Live site: https://isabelandradem.github.io/scales/
 | LIT1a · Rhyme · EN | https://isabelandradem.github.io/scales/lit1a/ |
 | LIT1c · Segmenting · EN | https://isabelandradem.github.io/scales/lit1c/ |
 | MAT6a · Addition · EN | https://isabelandradem.github.io/scales/mat6a/ |
+| MAT6b · Subtraction · EN | https://isabelandradem.github.io/scales/mat6b/ |
 
 ## Layout
 
@@ -24,11 +25,14 @@ Live site: https://isabelandradem.github.io/scales/
 ├── lit1c/
 │   ├── index.html  ← LIT1c · Segmenting · EN dashboard
 │   └── images/
-└── mat6a/
-    ├── index.html  ← MAT6a · Addition · EN dashboard (Spring / Fall toggle)
+├── mat6a/
+│   ├── index.html  ← MAT6a · Addition · EN dashboard (Spring / Fall toggle)
+│   └── images/
+│       ├── spring/
+│       └── fall/
+└── mat6b/
+    ├── index.html  ← MAT6b · Subtraction · EN dashboard (Spring / Fall toggle)
     └── images/
-        ├── spring/
-        └── fall/
 ```
 
 Each dashboard is a single HTML file with inline CSS / JS — no build step.

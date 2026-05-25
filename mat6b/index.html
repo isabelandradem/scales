@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MAT6b Subtraction · EN · Item Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #f7f8fa;
+    --panel: #ffffff;
+    --text: #1f2937;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+    --border-strong: #d1d5db;
+    --header-bg: #f3f4f6;
+    --row-hover: #fafbfc;
+
+    --green-bg: #d1fae5;
+    --green-fg: #047857;
+    --red-bg:   #fee2e2;
+    --red-fg:   #b91c1c;
+    --amber-bg: #fef3c7;
+    --amber-fg: #b45309;
+    --blue-bg:  #dbeafe;
+    --blue-fg:  #1d4ed8;
+    --gray-bg:  #f3f4f6;
+    --gray-fg:  #374151;
+
+    --grade-4yo: #8FD2E0;
+    --grade-kg:  #7BDAC5;
+
+    --accent: #2563eb;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto,
+      "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 1480px;
+    margin: 0 auto;
+    padding: 40px 32px 80px;
+  }
+
+  header.hero h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0 0 6px;
+    letter-spacing: -0.01em;
+  }
+  header.hero .subtitle {
+    color: var(--muted);
+    font-size: 15px;
+    margin-bottom: 6px;
+  }
+  header.hero .meta {
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  header.hero .hero-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  header.hero .hero-text { flex: 1; min-width: 280px; }
+
+  .season-toggle {
+    display: inline-flex;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 3px;
+    flex-shrink: 0;
+  }
+  .season-toggle button {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: background 120ms ease, color 120ms ease, box-shadow 120ms ease;
+    white-space: nowrap;
+  }
+  .season-toggle button:hover:not(.active) {
+    color: var(--text);
+    background: var(--header-bg);
+  }
+  .season-toggle button.active {
+    background: var(--accent);
+    color: #fff;
+    box-shadow: 0 1px 3px rgba(37, 99, 235, 0.25);
+  }
+
+  .summary {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 16px;
+    margin: 28px 0 32px;
+  }
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 18px;
+  }
+  .card.highlight {
+    background: linear-gradient(180deg, #fff5f5 0%, #fff 100%);
+    border-color: #fecaca;
+  }
+  .card.highlight .value { color: var(--red-fg); }
+  .card .label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    font-weight: 600;
+  }
+  .card .value {
+    font-size: 24px;
+    font-weight: 700;
+    margin-top: 6px;
+  }
+  .card .sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+  .controls .left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .controls .legend {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    color: var(--muted);
+    font-size: 12px;
+  }
+  .swatch {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .swatch span.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    display: inline-block;
+  }
+
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 14px;
+  }
+
+  thead th {
+    background: var(--header-bg);
+    color: var(--gray-fg);
+    text-align: left;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    user-select: none;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  thead th .arrow {
+    color: var(--muted);
+    margin-left: 4px;
+    font-size: 10px;
+  }
+  thead th[data-sort="active-asc"]  .arrow::after { content: "▲"; color: var(--accent); }
+  thead th[data-sort="active-desc"] .arrow::after { content: "▼"; color: var(--accent); }
+
+  tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 120ms ease;
+  }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: var(--row-hover); }
+  tbody tr.practice { background: #fbfaf7; }
+  tbody tr.practice:hover { background: #f5f3ec; }
+
+  tbody td {
+    padding: 14px 16px;
+    vertical-align: middle;
+  }
+
+  .item-name {
+    font-weight: 700;
+    font-size: 15px;
+  }
+  .practice-tag {
+    margin-left: 6px;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .screenshot-cell { width: 130px; }
+
+  .prompt-cell {
+    max-width: 320px;
+    min-width: 240px;
+  }
+  .prompt {
+    white-space: pre-line;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #1f2937;
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 10px;
+    max-height: 180px;
+    overflow: auto;
+  }
+  .prompt strong.label {
+    font-weight: 700;
+    color: #111827;
+  }
+  .screenshot {
+    width: 120px;
+    height: 84px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: #fff center/cover no-repeat;
+    cursor: zoom-in;
+    transition: transform 120ms ease, box-shadow 120ms ease;
+  }
+  .screenshot:hover {
+    transform: scale(1.04);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.10);
+  }
+
+  .pill {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 13px;
+    min-width: 52px;
+    text-align: center;
+  }
+  .pill.red    { background: var(--red-bg);   color: var(--red-fg); }
+  .pill.amber  { background: var(--amber-bg); color: var(--amber-fg); }
+  .pill.green  { background: var(--green-bg); color: var(--green-fg); }
+  .pill.blue   { background: var(--blue-bg);  color: var(--blue-fg); }
+  .pill.gray   { background: var(--gray-bg);  color: var(--gray-fg); }
+
+  .grade {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    min-width: 44px;
+    text-align: center;
+    color: #1f2937;
+  }
+  .grade.g-4yo { background: var(--grade-4yo); }
+  .grade.g-kg  { background: var(--grade-kg); }
+
+  .qtype {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 11.5px;
+    line-height: 1.3;
+    white-space: nowrap;
+    background: #f3f4f6;
+    color: #4b5563;
+  }
+
+  .num { font-variant-numeric: tabular-nums; }
+  .muted { color: var(--muted); }
+  .dash { color: var(--muted); }
+
+  .modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.7);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 24px;
+  }
+  .modal.open { display: flex; }
+  .modal img {
+    max-width: 90vw;
+    max-height: 90vh;
+    border-radius: 10px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+  }
+  .modal .close {
+    position: absolute;
+    top: 16px;
+    right: 24px;
+    color: #fff;
+    font-size: 28px;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    line-height: 1;
+  }
+
+  .notes {
+    margin-top: 18px;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  .notes code {
+    background: #eef0f3;
+    color: #111;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 11.5px;
+  }
+
+  @media (max-width: 1100px) {
+    .summary { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+  @media (max-width: 700px) {
+    .summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="hero">
+    <div class="hero-row">
+      <div class="hero-text">
+        <h1>MAT6b · Subtraction · English</h1>
+        <p class="subtitle" id="subtitle">Item-level psychometrics from the Spring 2026 administration</p>
+        <p class="meta" id="meta">N = 536 (item-level percent correct) · 592 starters · Raw Alpha = 0.816</p>
+      </div>
+      <div class="season-toggle" role="group" aria-label="Assessment season">
+        <button type="button" id="btnSpring" class="active" aria-pressed="true">Spring</button>
+        <button type="button" id="btnFall" aria-pressed="false">Fall</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="summary">
+    <div class="card highlight">
+      <div class="label">Exit Rate</div>
+      <div class="value" id="sumExitRate">21.1%</div>
+      <div class="sub" id="sumExitSub">(592 − 467) / 592 · 125 children exited</div>
+    </div>
+    <div class="card">
+      <div class="label">Started</div>
+      <div class="value" id="sumStarted">592</div>
+      <div class="sub">total children who began</div>
+    </div>
+    <div class="card">
+      <div class="label">Completed</div>
+      <div class="value" id="sumCompleted">467</div>
+      <div class="sub" id="sumCompletedSub">reached the end after q19</div>
+    </div>
+    <div class="card">
+      <div class="label">Mean % Correct</div>
+      <div class="value" id="sumMeanPct">35.8%</div>
+      <div class="sub" id="sumMeanSub">across the 19 scored items</div>
+    </div>
+    <div class="card">
+      <div class="label">Raw Alpha</div>
+      <div class="value" id="sumAlpha">0.816</div>
+      <div class="sub">internal consistency</div>
+    </div>
+  </section>
+<div class="controls">
+    <div class="left">
+      <strong style="font-size:14px;">Item-level table</strong>
+      <span class="muted" style="font-size:12px;">click any column header to sort</span>
+    </div>
+    <div class="legend">
+      <span class="swatch"><span class="dot" style="background:var(--grade-4yo)"></span>4YO</span>
+      <span class="swatch"><span class="dot" style="background:var(--grade-kg)"></span>KG</span>
+      <span style="opacity:0.4">|</span>
+      <span class="swatch"><span class="dot" style="background:#fca5a5"></span>% correct &lt; 35</span>
+      <span class="swatch"><span class="dot" style="background:#fcd34d"></span>35–60</span>
+      <span class="swatch"><span class="dot" style="background:#6ee7b7"></span>&gt; 60</span>
+    </div>
+  </div>
+
+  <div class="panel">
+    <table id="itemsTable">
+      <thead>
+        <tr>
+          <th data-key="order" data-type="num">Item <span class="arrow"></span></th>
+          <th data-key="grade" data-type="str">Grade <span class="arrow"></span></th>
+          <th>Screenshot</th>
+          <th>Prompt</th>
+          <th data-key="pct" data-type="num">% Correct <span class="arrow"></span></th>
+          <th data-key="itemRest" data-type="num">Item-Rest <span class="arrow"></span></th>
+          <th data-key="alphaDel" data-type="num">Alpha if Deleted <span class="arrow"></span></th>
+          <th data-key="exits" data-type="num">Exits <span class="arrow"></span></th>
+          <th data-key="type" data-type="str">Type <span class="arrow"></span></th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+
+    <p class="notes">
+    <strong>About the Exits column.</strong> The raw export reports the <em>last item a child saw</em>.
+    Because a child who left after seeing item <code>X</code> actually exited the app when the <em>next</em> item
+    appeared, every value has been shifted down by one position along the actual administration order
+    (<span id="notesOrder">q01 → q02 → q03 → … → q19</span>).
+    We therefore cannot know how many children exited at <code id="notesFirstItem">q01</code> (the first scored item), and the <span id="notesCompleted">467</span> children
+    whose last item was <code id="notesLastItem">q19</code> are counted as having <em>completed</em> the assessment rather than as exits.
+    Listening animations are excluded from this table because they do not appear in the exit-rates export.
+    The item set and administration order are identical in Fall and Spring.
+    Data source: <span id="notesSource">2026-05-01 Psychometric Output Khan_April.xlsx · MAT6b_Subtract EN</span>.
+  </p>
+</div>
+
+<div id="modal" class="modal" role="dialog" aria-modal="true">
+  <button class="close" id="modalClose" aria-label="Close">×</button>
+  <img id="modalImg" alt="" />
+</div>
+
+<script>
+  const SEASONS = {
+    spring: {
+      imgBase: "images",
+      subtitle: "Item-level psychometrics from the Spring 2026 administration",
+      source: "2026-05-01 Psychometric Output Khan_April.xlsx · MAT6b_Subtract EN",
+      adminOrder: "q01 → q02 → q03 → … → q19",
+      firstItem: "q01",
+      lastItem: "q19",
+      scoredCount: 19,
+      summary: { started: 592, completed: 467, meanPct: 35.8, rawAlpha: 0.816, n: 536 },
+      types: {
+        "showMe":        { label: "Show me",       rank: 1 },
+        "wordProblem":   { label: "Word problem",  rank: 2 },
+        "dragEquation":  { label: "Drag equation", rank: 3 }
+      },
+      prompts: {
+        "q01": `Inst: Show me: Reya gives one toy to Ollo. ContentPause3Sec. Press the green button when you're done.
+Yay/Oops: Tap me if you ever need help!
+3 - 1 = 2
+
+[Assessed Question]`,
+        "q02": `Inst1: Reya had three toys. She gave one to Ollo. How many toys does Reya have now?
+Yay/Oops: Let's do another one!
+3 - 1 = 2
+
+[Assessed Question]`,
+        "q03": `Inst: Show me: Sandy gives two toys to Ollo. ContentPause3Sec. Press the green button when you're done.
+Yay/Oops: Keep it up!
+4 - 2 = 2
+
+[Assessed Question]`,
+        "q04": `Inst1: Sandy had four toys. She gave two to Ollo. How many toys does Sandy have now?
+Yay/Oops: Let's keep playing!
+4 - 2 = 2
+
+[Assessed Question]`,
+        "q05": `Inst1: Reya has five butterflies in her basket. Show me: Reya lets three butterflies fly away.
+Yay/Oops: Keep it up!
+5-3=2
+
+[Assessed Question]`,
+        "q06": `Inst1: Reya had five butterflies. She let three fly away. How many butterflies does she have now?
+Yay/Oops: Let's do another one!
+5-3=2
+
+[Assessed Question]`,
+        "q07": `Inst1: Reya has four butterflies in her basket. Show me: Reya lets two butterflies fly away.
+Yay/Oops: Next question!
+4-2=2
+
+[Assessed Question]`,
+        "q08": `Inst1: Reya had four butterflies. She let two go away. How many butterflies does she have now?
+Yay/Oops: Let's do another one!
+4-2=2
+
+[Assessed Question]`,
+        "q09": `Inst1: Reya has nine bugs in her basket. Show me: Reya lets three bugs go away.
+Yay/Oops: Keep it up!
+9-3=6
+
+[Assessed Question]`,
+        "q10": `Inst1: Reya had nine bugs. She let three go away. How many bugs does she have now?
+Yay/Oops: Let's do another one!
+9-3=6
+
+[Assessed Question]`,
+        "q11": `Inst1: Reya has ten bugs in her basket. Show me: Reya lets two bugs go away.
+Yay/Oops: Keep it up!
+10-2=8
+
+[Assessed Question]`,
+        "q12": `Inst1: Reya had ten bugs. She let two go away. How many bugs does she have now?
+Yay/Oops: Let's play a different game!
+10-2=8
+
+[Assessed Question]`,
+        "q13": `Inst: Show me: Peck gives three toys to Ollo. ContentPause3Sec. Press the green button when you're done.
+Yay/Oops: Next question!
+9 - 3 = 6
+
+[Assessed Question]`,
+        "q14": `Inst1: Peck had nine toys. He gave three to Ollo. How many toys does Peck have now?
+Yay/Oops: Let's do one more!
+9 - 3 = 6
+
+[Assessed Question]`,
+        "q15": `Inst: Show me: Sandy gives two toys to Ollo. ContentPause3Sec. Press the green button when you're done.
+Yay/Oops: Keep it up!
+9 - 2 = 7
+
+[Assessed Question]`,
+        "q16": `Inst1: Sandy had nine toys. She gave two to Ollo. How many toys does Sandy have now?
+Yay/Oops: Let's play a new game!
+9 - 2 = 7
+
+[Assessed Question]`,
+        "q17": `Inst1: What is 3 - 2?
+Inst2: Drag the answer to the box.
+Yay/Oops: Keep it up!
+3-2
+
+[Assessed Question]`,
+        "q18": `Inst1: What is 4 - 2?
+Inst2: Drag the answer to the box.
+Yay/Oops: Let's do one more!
+4-2
+
+[Assessed Question]`,
+        "q19": `Inst1: What is 5 - 3?
+Inst2: Drag the answer to the box.
+Yay/Oops: Thanks for playing with me!
+5-3
+
+[Assessed Question]`,
+      },
+      items: [
+      { order: 1, num: "q01", grade: "4YO", practice: false, pct: 49.1, n: 536, itemRest: 0.487, alphaDel: 0.802, exits: null, type: "showMe", img: "q01-4YO.png", note: "Unknown – no data on exits before the first item" },
+      { order: 2, num: "q02", grade: "4YO", practice: false, pct: 32.6, n: 536, itemRest: 0.453, alphaDel: 0.804, exits: 4, type: "wordProblem", img: "q02-4YO.png" },
+      { order: 3, num: "q03", grade: "4YO", practice: false, pct: 50.9, n: 536, itemRest: 0.565, alphaDel: 0.797, exits: 13, type: "showMe", img: "q03-4YO.png" },
+      { order: 4, num: "q04", grade: "4YO", practice: false, pct: 33.2, n: 536, itemRest: 0.329, alphaDel: 0.811, exits: 6, type: "wordProblem", img: "q04-4YO.png" },
+      { order: 5, num: "q05", grade: "4YO", practice: false, pct: 24.8, n: 536, itemRest: 0.474, alphaDel: 0.803, exits: 13, type: "showMe", img: "q05-4YO.png" },
+      { order: 6, num: "q06", grade: "4YO", practice: false, pct: 66.6, n: 536, itemRest: 0.449, alphaDel: 0.804, exits: 5, type: "wordProblem", img: "q06-4YO.png" },
+      { order: 7, num: "q07", grade: "4YO", practice: false, pct: 45.0, n: 536, itemRest: 0.588, alphaDel: 0.795, exits: 11, type: "showMe", img: "q07-4YO.png" },
+      { order: 8, num: "q08", grade: "4YO", practice: false, pct: 64.6, n: 536, itemRest: 0.443, alphaDel: 0.804, exits: 5, type: "wordProblem", img: "q08-4YO.png" },
+      { order: 9, num: "q09", grade: "KG", practice: false, pct: 28.4, n: 536, itemRest: 0.545, alphaDel: 0.799, exits: 6, type: "showMe", img: "q09-KG.png" },
+      { order: 10, num: "q10", grade: "KG", practice: false, pct: 37.1, n: 536, itemRest: 0.27, alphaDel: 0.814, exits: 6, type: "wordProblem", img: "q10-KG.png" },
+      { order: 11, num: "q11", grade: "KG", practice: false, pct: 40.1, n: 536, itemRest: 0.603, alphaDel: 0.794, exits: 13, type: "showMe", img: "q11-KG.png" },
+      { order: 12, num: "q12", grade: "KG", practice: false, pct: 32.5, n: 536, itemRest: 0.442, alphaDel: 0.804, exits: 6, type: "wordProblem", img: "q12-KG.png" },
+      { order: 13, num: "q13", grade: "KG", practice: false, pct: 38.4, n: 536, itemRest: 0.55, alphaDel: 0.798, exits: 11, type: "showMe", img: "q13-KG.png" },
+      { order: 14, num: "q14", grade: "KG", practice: false, pct: 20.7, n: 536, itemRest: 0.066, alphaDel: 0.823, exits: 3, type: "wordProblem", img: "q14-KG.png" },
+      { order: 15, num: "q15", grade: "KG", practice: false, pct: 42.2, n: 536, itemRest: 0.42, alphaDel: 0.806, exits: 10, type: "showMe", img: "q15-KG.png" },
+      { order: 16, num: "q16", grade: "KG", practice: false, pct: 18.7, n: 536, itemRest: 0.212, alphaDel: 0.816, exits: 5, type: "wordProblem", img: "q16-KG.png" },
+      { order: 17, num: "q17", grade: "KG", practice: false, pct: 16.7, n: 532, itemRest: 0.156, alphaDel: 0.818, exits: 4, type: "dragEquation", img: "q17-KG.png" },
+      { order: 18, num: "q18", grade: "KG", practice: false, pct: 19.1, n: 528, itemRest: 0.039, alphaDel: 0.824, exits: 3, type: "dragEquation", img: "q18-KG.png" },
+      { order: 19, num: "q19", grade: "KG", practice: false, pct: 20.1, n: 527, itemRest: 0.199, alphaDel: 0.817, exits: 1, type: "dragEquation", img: "q19-KG.png" }
+      ]
+    },
+    fall: {
+      imgBase: "images",
+      subtitle: "Item-level psychometrics from the Fall 2025 administration",
+      source: "Pyschometric Output Khan_Fall25.xlsx · MAT6b_EN",
+      adminOrder: "q01 → q02 → q03 → … → q19",
+      firstItem: "q01",
+      lastItem: "q19",
+      scoredCount: 19,
+      summary: { started: 532, completed: 406, meanPct: 32.3, rawAlpha: 0.786, n: 493 },
+      types: {
+        "showMe":        { label: "Show me",       rank: 1 },
+        "wordProblem":   { label: "Word problem",  rank: 2 },
+        "dragEquation":  { label: "Drag equation", rank: 3 }
+      },
+      prompts: {
+        "q01": `Inst: Show me: Reya gives one toy to Ollo. ContentPause3Sec. Press the green button when you're done.
+Yay/Oops: Tap me if you ever need help!
+3 - 1 = 2
+
+[Assessed Question]`,
+        "q02": `Inst1: Reya had three toys. She gave one to Ollo. How many toys does Reya have now?
+Yay/Oops: Let's do another one!
+3 - 1 = 2
+
+[Assessed Question]`,
+        "q03": `Inst: Show me: Sandy gives two toys to Ollo. ContentPause3Sec. Press the green button when you're done.
+Yay/Oops: Keep it up!
+4 - 2 = 2
+
+[Assessed Question]`,
+        "q04": `Inst1: Sandy had four toys. She gave two to Ollo. How many toys does Sandy have now?
+Yay/Oops: Let's keep playing!
+4 - 2 = 2
+
+[Assessed Question]`,
+        "q05": `Inst1: Reya has five butterflies in her basket. Show me: Reya lets three butterflies fly away.
+Yay/Oops: Keep it up!
+5-3=2
+
+[Assessed Question]`,
+        "q06": `Inst1: Reya had five butterflies. She let three fly away. How many butterflies does she have now?
+Yay/Oops: Let's do another one!
+5-3=2
+
+[Assessed Question]`,
+        "q07": `Inst1: Reya has four butterflies in her basket. Show me: Reya lets two butterflies fly away.
+Yay/Oops: Next question!
+4-2=2
+
+[Assessed Question]`,
+        "q08": `Inst1: Reya had four butterflies. She let two go away. How many butterflies does she have now?
+Yay/Oops: Let's do another one!
+4-2=2
+
+[Assessed Question]`,
+        "q09": `Inst1: Reya has nine bugs in her basket. Show me: Reya lets three bugs go away.
+Yay/Oops: Keep it up!
+9-3=6
+
+[Assessed Question]`,
+        "q10": `Inst1: Reya had nine bugs. She let three go away. How many bugs does she have now?
+Yay/Oops: Let's do another one!
+9-3=6
+
+[Assessed Question]`,
+        "q11": `Inst1: Reya has ten bugs in her basket. Show me: Reya lets two bugs go away.
+Yay/Oops: Keep it up!
+10-2=8
+
+[Assessed Question]`,
+        "q12": `Inst1: Reya had ten bugs. She let two go away. How many bugs does she have now?
+Yay/Oops: Let's play a different game!
+10-2=8
+
+[Assessed Question]`,
+        "q13": `Inst: Show me: Peck gives three toys to Ollo. ContentPause3Sec. Press the green button when you're done.
+Yay/Oops: Next question!
+9 - 3 = 6
+
+[Assessed Question]`,
+        "q14": `Inst1: Peck had nine toys. He gave three to Ollo. How many toys does Peck have now?
+Yay/Oops: Let's do one more!
+9 - 3 = 6
+
+[Assessed Question]`,
+        "q15": `Inst: Show me: Sandy gives two toys to Ollo. ContentPause3Sec. Press the green button when you're done.
+Yay/Oops: Keep it up!
+9 - 2 = 7
+
+[Assessed Question]`,
+        "q16": `Inst1: Sandy had nine toys. She gave two to Ollo. How many toys does Sandy have now?
+Yay/Oops: Let's play a new game!
+9 - 2 = 7
+
+[Assessed Question]`,
+        "q17": `Inst1: What is 3 - 2?
+Inst2: Drag the answer to the box.
+Yay/Oops: Keep it up!
+3-2
+
+[Assessed Question]`,
+        "q18": `Inst1: What is 4 - 2?
+Inst2: Drag the answer to the box.
+Yay/Oops: Let's do one more!
+4-2
+
+[Assessed Question]`,
+        "q19": `Inst1: What is 5 - 3?
+Inst2: Drag the answer to the box.
+Yay/Oops: Thanks for playing with me!
+5-3
+
+[Assessed Question]`,
+      },
+      items: [
+      { order: 1, num: "q01", grade: "4YO", practice: false, pct: 45.6, n: 493, itemRest: 0.508, alphaDel: 0.765, exits: null, type: "showMe", img: "q01-4YO.png", note: "Unknown – no data on exits before the first item" },
+      { order: 2, num: "q02", grade: "4YO", practice: false, pct: 28.4, n: 493, itemRest: 0.451, alphaDel: 0.77, exits: 7, type: "wordProblem", img: "q02-4YO.png" },
+      { order: 3, num: "q03", grade: "4YO", practice: false, pct: 45.0, n: 493, itemRest: 0.591, alphaDel: 0.759, exits: 7, type: "showMe", img: "q03-4YO.png" },
+      { order: 4, num: "q04", grade: "4YO", practice: false, pct: 27.0, n: 493, itemRest: 0.323, alphaDel: 0.779, exits: 2, type: "wordProblem", img: "q04-4YO.png" },
+      { order: 5, num: "q05", grade: "4YO", practice: false, pct: 24.1, n: 493, itemRest: 0.407, alphaDel: 0.773, exits: 23, type: "showMe", img: "q05-4YO.png" },
+      { order: 6, num: "q06", grade: "4YO", practice: false, pct: 59.6, n: 493, itemRest: 0.404, alphaDel: 0.773, exits: 4, type: "wordProblem", img: "q06-4YO.png" },
+      { order: 7, num: "q07", grade: "4YO", practice: false, pct: 36.5, n: 493, itemRest: 0.438, alphaDel: 0.771, exits: 12, type: "showMe", img: "q07-4YO.png" },
+      { order: 8, num: "q08", grade: "4YO", practice: false, pct: 59.0, n: 493, itemRest: 0.434, alphaDel: 0.771, exits: 7, type: "wordProblem", img: "q08-4YO.png" },
+      { order: 9, num: "q09", grade: "KG", practice: false, pct: 24.5, n: 493, itemRest: 0.483, alphaDel: 0.768, exits: 16, type: "showMe", img: "q09-KG.png" },
+      { order: 10, num: "q10", grade: "KG", practice: false, pct: 32.7, n: 493, itemRest: 0.172, alphaDel: 0.789, exits: 3, type: "wordProblem", img: "q10-KG.png" },
+      { order: 11, num: "q11", grade: "KG", practice: false, pct: 33.3, n: 493, itemRest: 0.507, alphaDel: 0.766, exits: 11, type: "showMe", img: "q11-KG.png" },
+      { order: 12, num: "q12", grade: "KG", practice: false, pct: 27.0, n: 493, itemRest: 0.333, alphaDel: 0.778, exits: 4, type: "wordProblem", img: "q12-KG.png" },
+      { order: 13, num: "q13", grade: "KG", practice: false, pct: 32.3, n: 493, itemRest: 0.48, alphaDel: 0.768, exits: 8, type: "showMe", img: "q13-KG.png" },
+      { order: 14, num: "q14", grade: "KG", practice: false, pct: 21.5, n: 493, itemRest: 0.073, alphaDel: 0.793, exits: 3, type: "wordProblem", img: "q14-KG.png" },
+      { order: 15, num: "q15", grade: "KG", practice: false, pct: 42.4, n: 493, itemRest: 0.46, alphaDel: 0.769, exits: 5, type: "showMe", img: "q15-KG.png" },
+      { order: 16, num: "q16", grade: "KG", practice: false, pct: 15.2, n: 493, itemRest: 0.164, alphaDel: 0.787, exits: 1, type: "wordProblem", img: "q16-KG.png" },
+      { order: 17, num: "q17", grade: "KG", practice: false, pct: 18.5, n: 486, itemRest: 0.126, alphaDel: 0.79, exits: 5, type: "dragEquation", img: "q17-KG.png" },
+      { order: 18, num: "q18", grade: "KG", practice: false, pct: 22.4, n: 482, itemRest: 0.111, alphaDel: 0.791, exits: 3, type: "dragEquation", img: "q18-KG.png" },
+      { order: 19, num: "q19", grade: "KG", practice: false, pct: 17.5, n: 475, itemRest: 0.17, alphaDel: 0.787, exits: 5, type: "dragEquation", img: "q19-KG.png" }
+      ]
+    }
+  };
+
+  let ITEMS = [];
+  let PROMPTS = {};
+  let TYPES = {};
+  let IMG_BASE = "";
+
+  function escapeHtml(s) {
+    return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+
+  function boldLabels(escaped) {
+    return escaped.replace(
+      /(^|\n)(Inst[12]?|Yay\/Oops|Yay|Oops|ThisIsHow):/g,
+      (_, lead, label) => `${lead}<strong class="label">${label}:</strong>`
+    );
+  }
+
+  function renderPrompt(num) {
+    const raw = PROMPTS[num];
+    if (!raw) return `<span class="dash">—</span>`;
+    const body = raw.replace(/\s*\[(Practice Question|Assessed Question|Listening)\]\s*$/, "").trim();
+    return `<div class="prompt">${boldLabels(escapeHtml(body))}</div>`;
+  }
+
+  function updateSummary(season) {
+    const s = SEASONS[season];
+    const sum = s.summary;
+    const exited = sum.started - sum.completed;
+    const exitRate = ((exited / sum.started) * 100).toFixed(1);
+    document.getElementById("subtitle").textContent = s.subtitle;
+    document.getElementById("meta").textContent =
+      `N = ${sum.n} (item-level percent correct) · ${sum.started} starters · Raw Alpha = ${sum.rawAlpha.toFixed(3)}`;
+    document.getElementById("sumExitRate").textContent = `${exitRate}%`;
+    document.getElementById("sumExitSub").textContent =
+      `(${sum.started} − ${sum.completed}) / ${sum.started} · ${exited} children exited`;
+    document.getElementById("sumStarted").textContent = sum.started;
+    document.getElementById("sumCompleted").textContent = sum.completed;
+    document.getElementById("sumCompletedSub").textContent = `reached the end after ${s.lastItem}`;
+    document.getElementById("sumMeanPct").textContent = `${sum.meanPct.toFixed(1)}%`;
+    document.getElementById("sumMeanSub").textContent = `across the ${s.scoredCount} scored items`;
+    document.getElementById("sumAlpha").textContent = sum.rawAlpha.toFixed(3);
+    document.getElementById("notesOrder").textContent = s.adminOrder;
+    document.getElementById("notesFirstItem").textContent = s.firstItem;
+    document.getElementById("notesCompleted").textContent = sum.completed;
+    document.getElementById("notesLastItem").textContent = s.lastItem;
+    document.getElementById("notesSource").textContent = s.source;
+  }
+
+  function setSeason(season) {
+    currentSeason = season;
+    const s = SEASONS[season];
+    ITEMS = s.items;
+    PROMPTS = s.prompts;
+    TYPES = s.types;
+    IMG_BASE = s.imgBase;
+    updateSummary(season);
+    document.getElementById("btnSpring").classList.toggle("active", season === "spring");
+    document.getElementById("btnFall").classList.toggle("active", season === "fall");
+    document.getElementById("btnSpring").setAttribute("aria-pressed", season === "spring");
+    document.getElementById("btnFall").setAttribute("aria-pressed", season === "fall");
+    resort();
+  }
+
+  document.getElementById("btnSpring").addEventListener("click", () => setSeason("spring"));
+  document.getElementById("btnFall").addEventListener("click", () => setSeason("fall"));
+
+  const tbody = document.getElementById("tbody");
+  const fmt2  = v => v == null ? "—" : v.toFixed(2);
+  const fmt3  = v => v == null ? "—" : v.toFixed(3);
+
+  function pctClass(v) {
+    if (v == null) return "gray";
+    if (v < 35)   return "red";
+    if (v < 60)   return "amber";
+    return "green";
+  }
+  function irClass(v) {
+    if (v == null) return "gray";
+    if (v < 0.2) return "red";
+    if (v < 0.3) return "amber";
+    return "green";
+  }
+  function exitClass(v) {
+    if (v == null) return "gray";
+    if (v >= 50) return "red";
+    if (v >= 10) return "amber";
+    return "blue";
+  }
+  function gradeClass(g) {
+    if (g === "4YO") return "g-4yo";
+    if (g === "KG")  return "g-kg";
+    return "";
+  }
+  function renderType(key) {
+    const t = TYPES[key];
+    if (!t) return `<span class="dash">—</span>`;
+    return `<span class="qtype">${t.label}</span>`;
+  }
+
+  function labelFor(num) {
+    return num.toUpperCase().replace(/^Q0/, "Q").replace(/^P0/, "P");
+  }
+
+  function render(rows) {
+    tbody.innerHTML = rows.map(it => {
+      const label = labelFor(it.num);
+      const imgUrl = `${IMG_BASE}/${it.img}`;
+      const pctCell = it.pct == null
+        ? `<span class="dash">—</span>`
+        : `<span class="pill ${pctClass(it.pct)} num">${Math.round(it.pct)}%</span>`;
+      const irCell = it.itemRest == null
+        ? `<span class="dash">—</span>`
+        : `<span class="pill ${irClass(it.itemRest)} num">${fmt2(it.itemRest)}</span>`;
+      const alphaCell = it.alphaDel == null
+        ? `<span class="dash">—</span>`
+        : `<span class="num">${fmt3(it.alphaDel)}</span>`;
+      const exitsCell = it.exits == null
+        ? `<span class="dash" title="${it.note || ''}">—</span>`
+        : `<span class="pill ${exitClass(it.exits)} num">${it.exits}</span>`;
+      const gradeCell = `<span class="grade ${gradeClass(it.grade)}">${it.grade}</span>`;
+      const typeCell  = renderType(it.type);
+      const practiceTag = it.practice ? `<span class="practice-tag">practice</span>` : "";
+
+      return `
+        <tr class="${it.practice ? 'practice' : ''}">
+          <td class="item-name">${label}${practiceTag}</td>
+          <td>${gradeCell}</td>
+          <td class="screenshot-cell">
+            <div class="screenshot"
+                 style="background-image:url('${imgUrl}')"
+                 data-img="${imgUrl}"
+                 data-label="${label}"
+                 role="button"
+                 tabindex="0"
+                 aria-label="Open screenshot for ${label}"></div>
+          </td>
+          <td class="prompt-cell">${renderPrompt(it.num)}</td>
+          <td>${pctCell}</td>
+          <td>${irCell}</td>
+          <td>${alphaCell}</td>
+          <td>${exitsCell}</td>
+          <td>${typeCell}</td>
+        </tr>`;
+    }).join("");
+  }
+
+  let sortKey = null;
+  let sortDir = "asc";
+  const GRADE_ORDER = { "4YO": 0, "KG": 1 };
+
+  function compareItems(a, b, key) {
+    let av = a[key], bv = b[key];
+    if (key === "grade") {
+      const ao = GRADE_ORDER[av] ?? 99;
+      const bo = GRADE_ORDER[bv] ?? 99;
+      return sortDir === "asc" ? ao - bo : bo - ao;
+    }
+    if (key === "type") {
+      const ao = TYPES[av]?.rank ?? 99;
+      const bo = TYPES[bv]?.rank ?? 99;
+      if (ao !== bo) return sortDir === "asc" ? ao - bo : bo - ao;
+      return a.order - b.order;
+    }
+    const an = av == null, bn = bv == null;
+    if (an && bn) return 0;
+    if (an) return 1;
+    if (bn) return -1;
+    return sortDir === "asc" ? av - bv : bv - av;
+  }
+
+  function resort() {
+    const key = sortKey || "itemRest";
+    if (!sortKey) { sortKey = key; sortDir = "desc"; }
+    const sorted = [...ITEMS].sort((a, b) => compareItems(a, b, key));
+    render(sorted);
+    document.querySelectorAll("thead th").forEach(th => {
+      const k = th.dataset.key;
+      if (!k) { th.removeAttribute("data-sort"); return; }
+      th.dataset.sort = k === sortKey ? (sortDir === "asc" ? "active-asc" : "active-desc") : "";
+    });
+  }
+
+  function sortBy(key) {
+    if (sortKey === key) {
+      sortDir = sortDir === "asc" ? "desc" : "asc";
+    } else {
+      sortKey = key;
+      sortDir = (key === "order" || key === "grade" || key === "type" || key === "pct" || key === "alphaDel")
+        ? "asc" : "desc";
+    }
+    resort();
+  }
+
+  document.querySelectorAll("thead th[data-key]").forEach(th => {
+    th.addEventListener("click", () => sortBy(th.dataset.key));
+  });
+
+  const modal    = document.getElementById("modal");
+  const modalImg = document.getElementById("modalImg");
+  document.getElementById("modalClose").addEventListener("click", () => modal.classList.remove("open"));
+  modal.addEventListener("click", e => { if (e.target === modal) modal.classList.remove("open"); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape") modal.classList.remove("open"); });
+
+  tbody.addEventListener("click", e => {
+    const t = e.target.closest(".screenshot");
+    if (!t) return;
+    modalImg.src = t.dataset.img;
+    modalImg.alt = `Screenshot for ${t.dataset.label}`;
+    modal.classList.add("open");
+  });
+  tbody.addEventListener("keydown", e => {
+    if (e.key !== "Enter" && e.key !== " ") return;
+    const t = e.target.closest(".screenshot");
+    if (!t) return;
+    e.preventDefault();
+    modalImg.src = t.dataset.img;
+    modalImg.alt = `Screenshot for ${t.dataset.label}`;
+    modal.classList.add("open");
+  });
+
+  setSeason("spring");
+</script>
+</body>
+</html>
