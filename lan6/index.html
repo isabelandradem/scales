@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>LAN6 Vocabulary · EN · Item Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #f7f8fa;
+    --panel: #ffffff;
+    --text: #1f2937;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+    --border-strong: #d1d5db;
+    --header-bg: #f3f4f6;
+    --row-hover: #fafbfc;
+
+    --green-bg: #d1fae5;
+    --green-fg: #047857;
+    --red-bg:   #fee2e2;
+    --red-fg:   #b91c1c;
+    --amber-bg: #fef3c7;
+    --amber-fg: #b45309;
+    --blue-bg:  #dbeafe;
+    --blue-fg:  #1d4ed8;
+    --gray-bg:  #f3f4f6;
+    --gray-fg:  #374151;
+
+    --grade-2yo: #FBD7A8;
+    --grade-3yo: #BDE7B5;
+    --grade-4yo: #8FD2E0;
+    --grade-kg:  #7BDAC5;
+
+    --accent: #2563eb;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto,
+      "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 1520px;
+    margin: 0 auto;
+    padding: 40px 32px 80px;
+  }
+
+  header.hero h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0 0 6px;
+    letter-spacing: -0.01em;
+  }
+  header.hero .subtitle {
+    color: var(--muted);
+    font-size: 15px;
+    margin-bottom: 6px;
+  }
+  header.hero .meta {
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  header.hero .hero-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  header.hero .hero-text { flex: 1; min-width: 280px; }
+
+  .season-toggle {
+    display: inline-flex;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 3px;
+    flex-shrink: 0;
+  }
+  .season-toggle button {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: background 120ms ease, color 120ms ease, box-shadow 120ms ease;
+    white-space: nowrap;
+  }
+  .season-toggle button:hover:not(.active) {
+    color: var(--text);
+    background: var(--header-bg);
+  }
+  .season-toggle button.active {
+    background: var(--accent);
+    color: #fff;
+    box-shadow: 0 1px 3px rgba(37, 99, 235, 0.25);
+  }
+
+  .summary {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 16px;
+    margin: 28px 0 32px;
+  }
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 18px;
+  }
+  .card.highlight {
+    background: linear-gradient(180deg, #f0fdf4 0%, #fff 100%);
+    border-color: #bbf7d0;
+  }
+  .card.highlight .value { color: var(--green-fg); }
+  .card .label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    font-weight: 600;
+  }
+  .card .value {
+    font-size: 24px;
+    font-weight: 700;
+    margin-top: 6px;
+  }
+  .card .sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+  .controls .left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .controls .legend {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    color: var(--muted);
+    font-size: 12px;
+  }
+  .swatch {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .swatch span.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    display: inline-block;
+  }
+
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 14px;
+  }
+
+  thead th {
+    background: var(--header-bg);
+    color: var(--gray-fg);
+    text-align: left;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    user-select: none;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  thead th .arrow {
+    color: var(--muted);
+    margin-left: 4px;
+    font-size: 10px;
+  }
+  thead th[data-sort="active-asc"]  .arrow::after { content: "▲"; color: var(--accent); }
+  thead th[data-sort="active-desc"] .arrow::after { content: "▼"; color: var(--accent); }
+
+  tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 120ms ease;
+  }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: var(--row-hover); }
+
+  tbody td {
+    padding: 14px 16px;
+    vertical-align: middle;
+  }
+
+  .item-name {
+    font-weight: 700;
+    font-size: 15px;
+  }
+
+  .screenshot-cell { width: 130px; }
+
+  .word {
+    display: inline-block;
+    font-weight: 700;
+    font-size: 14px;
+    color: #111827;
+    text-transform: capitalize;
+  }
+
+  .prompt-cell {
+    max-width: 320px;
+    min-width: 240px;
+  }
+  .prompt {
+    white-space: pre-line;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #1f2937;
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 10px;
+    max-height: 180px;
+    overflow: auto;
+  }
+  .prompt strong.label {
+    font-weight: 700;
+    color: #111827;
+  }
+  .screenshot {
+    width: 120px;
+    height: 84px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: #fff center/cover no-repeat;
+    cursor: zoom-in;
+    transition: transform 120ms ease, box-shadow 120ms ease;
+  }
+  .screenshot:hover {
+    transform: scale(1.04);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.10);
+  }
+  .screenshot.empty {
+    cursor: default;
+    background: #f3f4f6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    font-size: 11px;
+  }
+
+  .pill {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 13px;
+    min-width: 52px;
+    text-align: center;
+  }
+  .pill.red    { background: var(--red-bg);   color: var(--red-fg); }
+  .pill.amber  { background: var(--amber-bg); color: var(--amber-fg); }
+  .pill.green  { background: var(--green-bg); color: var(--green-fg); }
+  .pill.blue   { background: var(--blue-bg);  color: var(--blue-fg); }
+  .pill.gray   { background: var(--gray-bg);  color: var(--gray-fg); }
+
+  .grade {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    min-width: 44px;
+    text-align: center;
+    color: #1f2937;
+  }
+  .grade.g-2yo { background: var(--grade-2yo); }
+  .grade.g-3yo { background: var(--grade-3yo); }
+  .grade.g-4yo { background: var(--grade-4yo); }
+  .grade.g-kg  { background: var(--grade-kg); }
+
+  .num { font-variant-numeric: tabular-nums; }
+  .muted { color: var(--muted); }
+  .dash { color: var(--muted); }
+
+  .modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.7);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 24px;
+  }
+  .modal.open { display: flex; }
+  .modal img {
+    max-width: 90vw;
+    max-height: 90vh;
+    border-radius: 10px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+  }
+  .modal .close {
+    position: absolute;
+    top: 16px;
+    right: 24px;
+    color: #fff;
+    font-size: 28px;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    line-height: 1;
+  }
+
+  .notes {
+    margin-top: 18px;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  .notes code {
+    background: #eef0f3;
+    color: #111;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 11.5px;
+  }
+
+  @media (max-width: 1100px) {
+    .summary { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+  @media (max-width: 700px) {
+    .summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="hero">
+    <div class="hero-row">
+      <div class="hero-text">
+        <h1>LAN6 · Vocabulary · English</h1>
+        <p class="subtitle" id="subtitle"></p>
+        <p class="meta" id="meta"></p>
+      </div>
+      <div class="season-toggle" role="group" aria-label="Assessment season">
+        <button type="button" id="btnSpring" class="active" aria-pressed="true">Spring</button>
+        <button type="button" id="btnFall" aria-pressed="false">Fall</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="summary">
+    <div class="card highlight">
+      <div class="label">Exit Rate</div>
+      <div class="value" id="sumExitRate"></div>
+      <div class="sub" id="sumExitSub"></div>
+    </div>
+    <div class="card">
+      <div class="label">Started</div>
+      <div class="value" id="sumStarted"></div>
+      <div class="sub">total children who began</div>
+    </div>
+    <div class="card">
+      <div class="label">Completed</div>
+      <div class="value" id="sumCompleted"></div>
+      <div class="sub" id="sumCompletedSub"></div>
+    </div>
+    <div class="card">
+      <div class="label">Mean % Correct</div>
+      <div class="value" id="sumMeanPct"></div>
+      <div class="sub" id="sumMeanSub"></div>
+    </div>
+    <div class="card">
+      <div class="label">Raw Alpha</div>
+      <div class="value" id="sumAlpha"></div>
+      <div class="sub">internal consistency</div>
+    </div>
+  </section>
+
+  <div class="controls">
+    <div class="left">
+      <strong style="font-size:14px;">Item-level table</strong>
+      <span class="muted" style="font-size:12px;">click any column header to sort</span>
+    </div>
+    <div class="legend">
+      <span class="swatch"><span class="dot" style="background:var(--grade-2yo)"></span>2YO</span>
+      <span class="swatch"><span class="dot" style="background:var(--grade-3yo)"></span>3YO</span>
+      <span class="swatch"><span class="dot" style="background:var(--grade-4yo)"></span>4YO</span>
+      <span class="swatch"><span class="dot" style="background:var(--grade-kg)"></span>KG</span>
+      <span style="opacity:0.4">|</span>
+      <span class="swatch"><span class="dot" style="background:#fca5a5"></span>% correct &lt; 50</span>
+      <span class="swatch"><span class="dot" style="background:#fcd34d"></span>50–70</span>
+      <span class="swatch"><span class="dot" style="background:#6ee7b7"></span>&gt; 70</span>
+    </div>
+  </div>
+
+  <div class="panel">
+    <table id="itemsTable">
+      <thead>
+        <tr>
+          <th data-key="order" data-type="num">Item <span class="arrow"></span></th>
+          <th data-key="grade" data-type="str">Grade <span class="arrow"></span></th>
+          <th>Screenshot</th>
+          <th data-key="word" data-type="str">Word <span class="arrow"></span></th>
+          <th>Prompt</th>
+          <th data-key="pct" data-type="num">% Correct <span class="arrow"></span></th>
+          <th data-key="itemRest" data-type="num">Item-Rest <span class="arrow"></span></th>
+          <th data-key="alphaDel" data-type="num">Alpha if Deleted <span class="arrow"></span></th>
+          <th data-key="exits" data-type="num">Exits <span class="arrow"></span></th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+
+  <p class="notes">
+    <strong>How the assessment works.</strong> LAN6 is a receptive-vocabulary task: the child hears a word and taps the
+    matching picture from four choices (the practice item <code>p01</code> uses two choices). Items are organized by
+    target age band &mdash; <strong>2YO</strong> (q01&ndash;q08), <strong>3YO</strong> (q09&ndash;q16),
+    <strong>4YO</strong> (q17&ndash;q24), and <strong>KG</strong> (q25 onward).
+  </p>
+  <p class="notes">
+    <strong>About the Exits column.</strong> The raw export reports the <em>last item a child saw</em>.
+    Because a child who left after seeing item <code>X</code> actually exited the app when the <em>next</em> item
+    appeared, every value has been shifted down by one position along the actual administration order
+    (<span id="notesOrder"></span>). Exits for the first scored item <code id="notesFirstItem"></code> are therefore
+    attributed from the practice item <code>p01</code>, and the <span id="notesCompleted"></span> children whose last
+    item was <code id="notesLastItem"></code> are counted as having <em>completed</em> the assessment rather than as exits.
+  </p>
+  <p class="notes">
+    <strong>Season differences.</strong> The Fall 2025 form had 32 scored items (q01&ndash;q32); Spring 2026 expanded the
+    KG band to 36 items (q01&ndash;q36). Items q01&ndash;q30 use the same target words across seasons, so their Spring
+    screenshots are reused on the Fall view; the late KG items that differ between forms show no screenshot on Fall.
+    Screenshots are captured from the Spring 2026 build.
+    Data source: <span id="notesSource"></span>.
+  </p>
+</div>
+
+<div id="modal" class="modal" role="dialog" aria-modal="true">
+  <button class="close" id="modalClose" aria-label="Close">×</button>
+  <img id="modalImg" alt="" />
+</div>
+
+<script>
+  const SEASONS = {"spring": {"imgBase": "images", "subtitle": "Item-level psychometrics from the Spring 2026 administration", "source": "2026-05-01 Psychometric Output Khan_April.xlsx · LAN6_Vocabulary EN", "adminOrder": "p01 → q01 → q02 → … → q36", "firstItem": "q01", "lastItem": "q36", "scoredCount": 36, "summary": {"started": 462, "completed": 404, "meanPct": 68.3, "rawAlpha": 0.925, "n": 439}, "prompts": {"q01": "Ask: cat\nInst: Cat. Tap the cat.\nChoices: cat (correct), stairs, cake, dog\nYay: Lets do another one!", "q02": "Ask: lips\nInst: Lips. Tap the Lips.\nChoices: lips (correct), ladder, tooth, stick\nYay: Keep it up!", "q03": "Ask: girl\nInst: Girl. Tap the girl.\nChoices: girl (correct), grass, boy, milk\nYay: Lets keep playing!", "q04": "Ask: bread\nInst: Bread. Tap the bread.\nChoices: loaf (correct), brush, pup, cheese\nYay: Way to go!", "q05": "Ask: pants\nInst: Pants. Tap the pants.\nChoices: pants (correct), popsicle, zipper, arm\nYay: This is so fun!", "q06": "Ask: blocks\nInst: Blocks. Tap the blocks.\nChoices: blocks (correct), candy, button, doll\nYay: Lets do another one!", "q07": "Ask: penguin\nInst: Penguin. Tap the penguin.\nChoices: penguin (correct), lion, pizza, glasses\nYay: Keep it up!", "q08": "Ask: sleep\nInst: Sleep. Tap sleep.\nChoices: sleep (correct), night, train, necklace\nYay: Lets keep playing!", "q09": "Ask: bug\nInst: Bug. Tap the bug.\nChoices: bug (correct), ice, batsports, frog\nYay: Way to go!", "q10": "Ask: tongue\nInst: Tongue. Tap the tongue.\nChoices: tongue (correct), chin, teacher, dragon\nYay: This is so fun!", "q11": "Ask: fox\nInst: Fox. Tap the fox.\nChoices: fox (correct), farm, rabbit, mop\nYay: Lets do another one!", "q12": "Ask: fruit\nInst: Fruit. Tap the fruit.\nChoices: fruit (correct), cereal, sky, elephant\nYay: Keep it up!", "q13": "Ask: meat\nInst: Meat. Tap the meat.\nChoices: meat (correct), map, net, cracker\nYay: Lets keep playing!", "q14": "Ask: gloves\nInst: Gloves. Tap the gloves.\nChoices: gloves (correct), watch, wave, gum\nYay: Way to go!", "q15": "Ask: hole\nInst: Hole. Tap the hole.\nChoices: hole (correct), kiss, ground, nail\nYay: This is so fun!", "q16": "Ask: nurse\nInst: Nurse. Tap the nurse.\nChoices: nurse (correct), picture, moose, cowboy\nYay: Lets do another one!", "q17": "Ask: boat\nInst: Boat. Tap the boat.\nChoices: boat (correct), desk, bird, ollotub\nYay: Keep it up!", "q18": "Ask: giraffe\nInst: Giraffe. Tap the giraffe.\nChoices: giraffe (correct), jar, bell, hippo\nYay: Lets keep playing!", "q19": "Ask: cone\nInst: Cone. Tap the cone.\nChoices: cone (correct), candle, cap, heart\nYay: Way to go!", "q20": "Ask: police officer\nInst: Police officer. Tap the police officer.\nChoices: police officer (correct), firefighter, garage, pot\nYay: This is so fun!", "q21": "Ask: lettuce\nInst: Lettuce. Tap the lettuce.\nChoices: lettuce (correct), letter, pickle, tractor\nYay: Lets do another one!", "q22": "Ask: peach\nInst: Peach. Tap the peach.\nChoices: peach (correct), cheek, jam, gate\nYay: Keep it up!", "q23": "Ask: sponge\nInst: Sponge. Tap the sponge.\nChoices: sponge (correct), tissue, sweater, stove\nYay: Lets keep playing!", "q24": "Ask: corn\nInst: Corn. Tap the corn.\nChoices: corn (correct), pepper, slipper, castle\nYay: Way to go!", "q25": "Ask: berry\nInst: Berry. Tap the berry.\nChoices: blueberry (correct), lime, chess, braid\nYay: This is so fun!", "q26": "Ask: brick\nInst: Brick. Tap the brick.\nChoices: brick (correct), plank, bridge, mug\nYay: Lets do another one!", "q27": "Ask: wagon\nInst: Wagon. Tap the wagon.\nChoices: wagon (correct), cart, camera, lock\nYay: Keep it up!", "q28": "Ask: smoke\nInst: Smoke. Tap the smoke.\nChoices: smoke (correct), stool, fire, medicine\nYay: Lets keep playing!", "q29": "Ask: paint\nInst: Paint. Tap the paint.\nChoices: paint (correct), hammer, door, shower\nYay: Way to go!", "q30": "Ask: grasshopper\nInst: Grasshopper. Tap the grasshopper.\nChoices: grasshopper (correct), kangaroo, skate, rocket\nYay: This is so fun!", "q31": "Ask: skunk\nInst: Skunk. Tap the skunk.\nChoices: scale (correct), chimney, skunk, weasel\nYay: Lets do another one!", "q32": "Ask: chicken\nInst: Chicken. Tap the chicken.\nChoices: chicken (correct), duck, cherry, cradle\nYay: Keep it up!", "q33": "Ask: astronaut\nInst: Astronaut. Tap the astronaut.\nChoices: astronaut (correct), sunglasses, space, nut\nYay: Lets keep playing!", "q34": "Ask: treasure\nInst: Treasure. Tap the treasure.\nChoices: treasure (correct), quarter, ring, trumpet\nYay: Way to go!", "q35": "Ask: jet\nInst: Jet. Tap the jet.\nChoices: jet (correct), jacket, whistle, rocket\nYay: Lets do one more!", "q36": "Ask: vacuum\nInst: Vacuum. Tap the vacuum.\nChoices: vacuum (correct), van, hanger, sweep\nYay: Thanks for playing with me!"}, "items": [{"order": 1, "num": "q01", "grade": "2YO", "practice": false, "word": "cat", "pct": 74.9, "n": 439, "itemRest": 0.402, "alphaDel": 0.924, "exits": 2, "nopt": 4, "img": "q01-2YO.png"}, {"order": 2, "num": "q02", "grade": "2YO", "practice": false, "word": "lips", "pct": 77.7, "n": 439, "itemRest": 0.409, "alphaDel": 0.924, "exits": 3, "nopt": 4, "img": "q02-2YO.png"}, {"order": 3, "num": "q03", "grade": "2YO", "practice": false, "word": "girl", "pct": 77.9, "n": 439, "itemRest": 0.422, "alphaDel": 0.924, "exits": 2, "nopt": 4, "img": "q03-2YO.png"}, {"order": 4, "num": "q04", "grade": "2YO", "practice": false, "word": "bread", "pct": 77.4, "n": 439, "itemRest": 0.462, "alphaDel": 0.923, "exits": 3, "nopt": 4, "img": "q04-2YO.png"}, {"order": 5, "num": "q05", "grade": "2YO", "practice": false, "word": "pants", "pct": 78.1, "n": 439, "itemRest": 0.458, "alphaDel": 0.923, "exits": 3, "nopt": 4, "img": "q05-2YO.png"}, {"order": 6, "num": "q06", "grade": "2YO", "practice": false, "word": "blocks", "pct": 77.4, "n": 439, "itemRest": 0.498, "alphaDel": 0.923, "exits": 2, "nopt": 4, "img": "q06-2YO.png"}, {"order": 7, "num": "q07", "grade": "2YO", "practice": false, "word": "penguin", "pct": 73.3, "n": 439, "itemRest": 0.545, "alphaDel": 0.923, "exits": 2, "nopt": 4, "img": "q07-2YO.png"}, {"order": 8, "num": "q08", "grade": "2YO", "practice": false, "word": "sleep", "pct": 75.2, "n": 439, "itemRest": 0.625, "alphaDel": 0.922, "exits": 1, "nopt": 4, "img": "q08-2YO.png"}, {"order": 9, "num": "q09", "grade": "3YO", "practice": false, "word": "bug", "pct": 74.0, "n": 439, "itemRest": 0.616, "alphaDel": 0.922, "exits": 2, "nopt": 4, "img": "q09-3YO.png"}, {"order": 10, "num": "q10", "grade": "3YO", "practice": false, "word": "tongue", "pct": 75.9, "n": 439, "itemRest": 0.377, "alphaDel": 0.924, "exits": 1, "nopt": 4, "img": "q10-3YO.png"}, {"order": 11, "num": "q11", "grade": "3YO", "practice": false, "word": "fox", "pct": 71.3, "n": 439, "itemRest": 0.561, "alphaDel": 0.922, "exits": 0, "nopt": 4, "img": "q11-3YO.png"}, {"order": 12, "num": "q12", "grade": "3YO", "practice": false, "word": "fruit", "pct": 70.2, "n": 439, "itemRest": 0.445, "alphaDel": 0.924, "exits": 1, "nopt": 4, "img": "q12-3YO.png"}, {"order": 13, "num": "q13", "grade": "3YO", "practice": false, "word": "meat", "pct": 71.5, "n": 439, "itemRest": 0.568, "alphaDel": 0.922, "exits": 0, "nopt": 4, "img": "q13-3YO.png"}, {"order": 14, "num": "q14", "grade": "3YO", "practice": false, "word": "gloves", "pct": 73.6, "n": 439, "itemRest": 0.421, "alphaDel": 0.924, "exits": 2, "nopt": 4, "img": "q14-3YO.png"}, {"order": 15, "num": "q15", "grade": "3YO", "practice": false, "word": "hole", "pct": 75.2, "n": 439, "itemRest": 0.468, "alphaDel": 0.923, "exits": 0, "nopt": 4, "img": "q15-3YO.png"}, {"order": 16, "num": "q16", "grade": "3YO", "practice": false, "word": "nurse", "pct": 72.9, "n": 439, "itemRest": 0.613, "alphaDel": 0.922, "exits": 0, "nopt": 4, "img": "q16-3YO.png"}, {"order": 17, "num": "q17", "grade": "4YO", "practice": false, "word": "boat", "pct": 72.9, "n": 439, "itemRest": 0.595, "alphaDel": 0.922, "exits": 2, "nopt": 4, "img": "q17-4YO.png"}, {"order": 18, "num": "q18", "grade": "4YO", "practice": false, "word": "giraffe", "pct": 68.3, "n": 439, "itemRest": 0.642, "alphaDel": 0.921, "exits": 1, "nopt": 4, "img": "q18-4YO.png"}, {"order": 19, "num": "q19", "grade": "4YO", "practice": false, "word": "cone", "pct": 64.2, "n": 439, "itemRest": 0.55, "alphaDel": 0.922, "exits": 3, "nopt": 4, "img": "q19-4YO.png"}, {"order": 20, "num": "q20", "grade": "4YO", "practice": false, "word": "police officer", "pct": 61.7, "n": 439, "itemRest": 0.645, "alphaDel": 0.921, "exits": 2, "nopt": 4, "img": "q20-4YO.png"}, {"order": 21, "num": "q21", "grade": "4YO", "practice": false, "word": "lettuce", "pct": 69.9, "n": 439, "itemRest": 0.487, "alphaDel": 0.923, "exits": 1, "nopt": 4, "img": "q21-4YO.png"}, {"order": 22, "num": "q22", "grade": "4YO", "practice": false, "word": "peach", "pct": 66.3, "n": 439, "itemRest": 0.607, "alphaDel": 0.922, "exits": 5, "nopt": 4, "img": "q22-4YO.png"}, {"order": 23, "num": "q23", "grade": "4YO", "practice": false, "word": "sponge", "pct": 70.4, "n": 439, "itemRest": 0.516, "alphaDel": 0.923, "exits": 2, "nopt": 4, "img": "q23-4YO.png"}, {"order": 24, "num": "q24", "grade": "4YO", "practice": false, "word": "corn", "pct": 65.4, "n": 439, "itemRest": 0.502, "alphaDel": 0.923, "exits": 3, "nopt": 4, "img": "q24-4YO.png"}, {"order": 25, "num": "q25", "grade": "KG", "practice": false, "word": "berry", "pct": 64.0, "n": 439, "itemRest": 0.501, "alphaDel": 0.923, "exits": 1, "nopt": 4, "img": "q25-KG.png"}, {"order": 26, "num": "q26", "grade": "KG", "practice": false, "word": "brick", "pct": 59.9, "n": 439, "itemRest": 0.548, "alphaDel": 0.922, "exits": 0, "nopt": 4, "img": "q26-KG.png"}, {"order": 27, "num": "q27", "grade": "KG", "practice": false, "word": "wagon", "pct": 60.8, "n": 439, "itemRest": 0.56, "alphaDel": 0.922, "exits": 5, "nopt": 4, "img": "q27-KG.png"}, {"order": 28, "num": "q28", "grade": "KG", "practice": false, "word": "smoke", "pct": 56.9, "n": 439, "itemRest": 0.493, "alphaDel": 0.923, "exits": 1, "nopt": 4, "img": "q28-KG.png"}, {"order": 29, "num": "q29", "grade": "KG", "practice": false, "word": "paint", "pct": 48.1, "n": 439, "itemRest": 0.368, "alphaDel": 0.925, "exits": 0, "nopt": 4, "img": "q29-KG.png"}, {"order": 30, "num": "q30", "grade": "KG", "practice": false, "word": "grasshopper", "pct": 53.2, "n": 438, "itemRest": 0.419, "alphaDel": 0.924, "exits": 1, "nopt": 4, "img": "q30-KG.png"}, {"order": 31, "num": "q31", "grade": "KG", "practice": false, "word": "skunk", "pct": 65.1, "n": 435, "itemRest": 0.556, "alphaDel": 0.922, "exits": 2, "nopt": 4, "img": "q31-KG.png"}, {"order": 32, "num": "q32", "grade": "KG", "practice": false, "word": "chicken", "pct": 62.2, "n": 434, "itemRest": 0.377, "alphaDel": 0.924, "exits": 1, "nopt": 4, "img": "q32-KG.png"}, {"order": 33, "num": "q33", "grade": "KG", "practice": false, "word": "astronaut", "pct": 57.8, "n": 434, "itemRest": 0.332, "alphaDel": 0.925, "exits": 0, "nopt": 4, "img": "q33-KG.png"}, {"order": 34, "num": "q34", "grade": "KG", "practice": false, "word": "treasure", "pct": 78.6, "n": 434, "itemRest": 0.397, "alphaDel": 0.924, "exits": 0, "nopt": 4, "img": "q34-KG.png"}, {"order": 35, "num": "q35", "grade": "KG", "practice": false, "word": "jet", "pct": 39.8, "n": 432, "itemRest": 0.059, "alphaDel": 0.928, "exits": 3, "nopt": 4, "img": "q35-KG.png"}, {"order": 36, "num": "q36", "grade": "KG", "practice": false, "word": "vacuum", "pct": 77.0, "n": 430, "itemRest": 0.515, "alphaDel": 0.923, "exits": 1, "nopt": 4, "img": "q36-KG.png"}]}, "fall": {"imgBase": "images", "subtitle": "Item-level psychometrics from the Fall 2025 administration", "source": "Pyschometric Output Khan_Fall25.xlsx · LAN6_EN", "adminOrder": "p01 → q01 → q02 → … → q32", "firstItem": "q01", "lastItem": "q32", "scoredCount": 32, "summary": {"started": 555, "completed": 491, "meanPct": 66.1, "rawAlpha": 0.902, "n": 507}, "prompts": {"q01": "Ask: cat\nInst: Cat. Tap the cat.\nChoices: cat (correct), stairs, cake, dog\nYay: Lets do another one.", "q02": "Ask: lips\nInst: Lips. Tap the Lips.\nChoices: lips (correct), ladder, tooth, stick\nYay: Keep it up.", "q03": "Ask: girl\nInst: Girl. Tap the girl.\nChoices: girl (correct), grass, boy, milk\nYay: Lets keep playing", "q04": "Ask: bread\nInst: Bread. Tap the bread.\nChoices: loaf (correct), brush, pup, cheese\nYay: Way to go!", "q05": "Ask: pants\nInst: Pants. Tap the pants.\nChoices: pants (correct), popsicle, zipper, arm\nYay: This is so fun!", "q06": "Ask: blocks\nInst: Blocks. Tap the blocks.\nChoices: blocks (correct), candy, button, doll\nYay: Lets do another one.", "q07": "Ask: penguin\nInst: Penguin. Tap the penguin.\nChoices: penguin (correct), lion, pizza, glasses\nYay: Keep it up.", "q08": "Ask: sleep\nInst: Sleep. Tap sleep.\nChoices: sleep (correct), night, train, necklace\nYay: Lets keep playing", "q09": "Ask: bug\nInst: Bug. Tap the bug.\nChoices: bug (correct), ice, batsports, frog\nYay: Way to go!", "q10": "Ask: tongue\nInst: Tongue. Tap the tongue.\nChoices: tongue (correct), chin, teacher, dragon\nYay: This is so fun!", "q11": "Ask: fox\nInst: Fox. Tap the fox.\nChoices: fox (correct), farm, rabbit, mop\nYay: Lets do another one.", "q12": "Ask: fruit\nInst: Fruit. Tap the fruit.\nChoices: fruit (correct), cereal, sky, elephant\nYay: Keep it up.", "q13": "Ask: meat\nInst: Meat. Tap the meat.\nChoices: meat (correct), map, net, cracker\nYay: Lets keep playing", "q14": "Ask: gloves\nInst: Gloves. Tap the gloves.\nChoices: gloves (correct), watch, wave, gum\nYay: Way to go!", "q15": "Ask: hole\nInst: Hole. Tap the hole.\nChoices: hole (correct), kiss, ground, nail\nYay: This is so fun!", "q16": "Ask: nurse\nInst: Nurse. Tap the nurse.\nChoices: nurse (correct), picture, moose, cowboy\nYay: Lets do another one.", "q17": "Ask: boat\nInst: Boat. Tap the boat.\nChoices: boat (correct), desk, bird, helicopter\nYay: Keep it up.", "q18": "Ask: giraffe\nInst: Giraffe. Tap the giraffe.\nChoices: giraffe (correct), jar, bell, hippo\nYay: Lets keep playing", "q19": "Ask: cone\nInst: Cone. Tap the cone.\nChoices: cone (correct), candle, cap, heart\nYay: Way to go!", "q20": "Ask: police officer\nInst: Police officer. Tap the police officer.\nChoices: police officer (correct), firefighter, garage, pot\nYay: This is so fun!", "q21": "Ask: lettuce\nInst: Lettuce. Tap the lettuce.\nChoices: lettuce (correct), letter, pickle, tractor\nYay: Lets do another one.", "q22": "Ask: peach\nInst: Peach. Tap the peach.\nChoices: peach (correct), cheek, jam, gate\nYay: Keep it up.", "q23": "Ask: sponge\nInst: Sponge. Tap the sponge.\nChoices: sponge (correct), tissue, sweater, stove\nYay: Lets keep playing", "q24": "Ask: corn\nInst: Corn. Tap the corn.\nChoices: corn (correct), pepper, slipper, castle\nYay: Way to go!", "q25": "Ask: berry\nInst: Berry. Tap the berry.\nChoices: strawberry (correct), plum, chess, braid\nYay: This is so fun!", "q26": "Ask: brick\nInst: Brick. Tap the brick.\nChoices: brick (correct), plank, bridge, mug\nYay: Lets do another one.", "q27": "Ask: wagon\nInst: Wagon. Tap the wagon.\nChoices: wagon (correct), cart, camera, lock\nYay: Keep it up.", "q28": "Ask: smoke\nInst: Smoke. Tap the smoke.\nChoices: smoke (correct), stool, fire, medicine\nYay: Lets keep playing", "q29": "Ask: paint\nInst: Paint. Tap the paint.\nChoices: paint (correct), hammer, door, shower\nYay: Way to go!", "q30": "Ask: grasshopper\nInst: Grasshopper. Tap the grasshopper.\nChoices: grasshopper (correct), kangaroo, skate, rocket\nYay: This is so fun!", "q31": "Ask: raccoon\nInst: Raccoon. Tap the Raccoon.\nChoices: raccoon (correct), chimney, beaver, ruler\nYay: Lets do one more.", "q32": "Ask: rooster\nInst: Rooster. Tap the rooster.\nChoices: rooster (correct), turkey, restaurant, cradle\nYay: Thanks for playing with me."}, "items": [{"order": 1, "num": "q01", "grade": "2YO", "practice": false, "word": "cat", "pct": 68.6, "n": 507, "itemRest": 0.383, "alphaDel": 0.9, "exits": 4, "nopt": 4, "img": "q01-2YO.png"}, {"order": 2, "num": "q02", "grade": "2YO", "practice": false, "word": "lips", "pct": 75.5, "n": 507, "itemRest": 0.393, "alphaDel": 0.9, "exits": 4, "nopt": 4, "img": "q02-2YO.png"}, {"order": 3, "num": "q03", "grade": "2YO", "practice": false, "word": "girl", "pct": 76.5, "n": 507, "itemRest": 0.542, "alphaDel": 0.898, "exits": 1, "nopt": 4, "img": "q03-2YO.png"}, {"order": 4, "num": "q04", "grade": "2YO", "practice": false, "word": "bread", "pct": 67.3, "n": 507, "itemRest": 0.501, "alphaDel": 0.898, "exits": 1, "nopt": 4, "img": "q04-2YO.png"}, {"order": 5, "num": "q05", "grade": "2YO", "practice": false, "word": "pants", "pct": 67.3, "n": 507, "itemRest": 0.579, "alphaDel": 0.897, "exits": 1, "nopt": 4, "img": "q05-2YO.png"}, {"order": 6, "num": "q06", "grade": "2YO", "practice": false, "word": "blocks", "pct": 75.0, "n": 507, "itemRest": 0.559, "alphaDel": 0.897, "exits": 4, "nopt": 4, "img": "q06-2YO.png"}, {"order": 7, "num": "q07", "grade": "2YO", "practice": false, "word": "penguin", "pct": 75.1, "n": 507, "itemRest": 0.599, "alphaDel": 0.897, "exits": 3, "nopt": 4, "img": "q07-2YO.png"}, {"order": 8, "num": "q08", "grade": "2YO", "practice": false, "word": "sleep", "pct": 73.6, "n": 507, "itemRest": 0.295, "alphaDel": 0.902, "exits": 2, "nopt": 4, "img": "q08-2YO.png"}, {"order": 9, "num": "q09", "grade": "3YO", "practice": false, "word": "bug", "pct": 73.0, "n": 507, "itemRest": 0.575, "alphaDel": 0.897, "exits": 2, "nopt": 4, "img": "q09-3YO.png"}, {"order": 10, "num": "q10", "grade": "3YO", "practice": false, "word": "tongue", "pct": 72.2, "n": 507, "itemRest": 0.466, "alphaDel": 0.899, "exits": 4, "nopt": 4, "img": "q10-3YO.png"}, {"order": 11, "num": "q11", "grade": "3YO", "practice": false, "word": "fox", "pct": 75.1, "n": 507, "itemRest": 0.596, "alphaDel": 0.897, "exits": 2, "nopt": 4, "img": "q11-3YO.png"}, {"order": 12, "num": "q12", "grade": "3YO", "practice": false, "word": "fruit", "pct": 71.2, "n": 507, "itemRest": 0.536, "alphaDel": 0.898, "exits": 6, "nopt": 4, "img": "q12-3YO.png"}, {"order": 13, "num": "q13", "grade": "3YO", "practice": false, "word": "meat", "pct": 65.3, "n": 507, "itemRest": 0.342, "alphaDel": 0.901, "exits": 4, "nopt": 4, "img": "q13-3YO.png"}, {"order": 14, "num": "q14", "grade": "3YO", "practice": false, "word": "gloves", "pct": 68.6, "n": 507, "itemRest": 0.641, "alphaDel": 0.896, "exits": 4, "nopt": 4, "img": "q14-3YO.png"}, {"order": 15, "num": "q15", "grade": "3YO", "practice": false, "word": "hole", "pct": 64.1, "n": 507, "itemRest": 0.435, "alphaDel": 0.899, "exits": 0, "nopt": 4, "img": "q15-3YO.png"}, {"order": 16, "num": "q16", "grade": "3YO", "practice": false, "word": "nurse", "pct": 70.2, "n": 507, "itemRest": 0.337, "alphaDel": 0.901, "exits": 0, "nopt": 4, "img": "q16-3YO.png"}, {"order": 17, "num": "q17", "grade": "4YO", "practice": false, "word": "boat", "pct": 75.0, "n": 507, "itemRest": 0.494, "alphaDel": 0.898, "exits": 4, "nopt": 4, "img": "q17-4YO.png"}, {"order": 18, "num": "q18", "grade": "4YO", "practice": false, "word": "giraffe", "pct": 75.7, "n": 507, "itemRest": 0.56, "alphaDel": 0.897, "exits": 2, "nopt": 4, "img": "q18-4YO.png"}, {"order": 19, "num": "q19", "grade": "4YO", "practice": false, "word": "cone", "pct": 54.0, "n": 507, "itemRest": 0.478, "alphaDel": 0.899, "exits": 1, "nopt": 4, "img": "q19-4YO.png"}, {"order": 20, "num": "q20", "grade": "4YO", "practice": false, "word": "police officer", "pct": 80.5, "n": 507, "itemRest": 0.497, "alphaDel": 0.899, "exits": 2, "nopt": 4, "img": "q20-4YO.png"}, {"order": 21, "num": "q21", "grade": "4YO", "practice": false, "word": "lettuce", "pct": 60.2, "n": 507, "itemRest": 0.51, "alphaDel": 0.898, "exits": 0, "nopt": 4, "img": "q21-4YO.png"}, {"order": 22, "num": "q22", "grade": "4YO", "practice": false, "word": "peach", "pct": 64.7, "n": 507, "itemRest": 0.468, "alphaDel": 0.899, "exits": 0, "nopt": 4, "img": "q22-4YO.png"}, {"order": 23, "num": "q23", "grade": "4YO", "practice": false, "word": "sponge", "pct": 70.2, "n": 507, "itemRest": 0.52, "alphaDel": 0.898, "exits": 2, "nopt": 4, "img": "q23-4YO.png"}, {"order": 24, "num": "q24", "grade": "4YO", "practice": false, "word": "corn", "pct": 69.8, "n": 507, "itemRest": 0.563, "alphaDel": 0.897, "exits": 1, "nopt": 4, "img": "q24-4YO.png"}, {"order": 25, "num": "q25", "grade": "KG", "practice": false, "word": "berry", "pct": 24.7, "n": 507, "itemRest": -0.044, "alphaDel": 0.907, "exits": 1, "nopt": 4, "img": "q25-KG.png"}, {"order": 26, "num": "q26", "grade": "KG", "practice": false, "word": "brick", "pct": 53.5, "n": 507, "itemRest": 0.395, "alphaDel": 0.9, "exits": 2, "nopt": 4, "img": "q26-KG.png"}, {"order": 27, "num": "q27", "grade": "KG", "practice": false, "word": "wagon", "pct": 50.8, "n": 506, "itemRest": 0.348, "alphaDel": 0.901, "exits": 1, "nopt": 4, "img": "q27-KG.png"}, {"order": 28, "num": "q28", "grade": "KG", "practice": false, "word": "smoke", "pct": 56.4, "n": 505, "itemRest": 0.434, "alphaDel": 0.899, "exits": 0, "nopt": 4, "img": "q28-KG.png"}, {"order": 29, "num": "q29", "grade": "KG", "practice": false, "word": "paint", "pct": 78.5, "n": 502, "itemRest": 0.49, "alphaDel": 0.899, "exits": 3, "nopt": 4, "img": "q29-KG.png"}, {"order": 30, "num": "q30", "grade": "KG", "practice": false, "word": "grasshopper", "pct": 63.9, "n": 501, "itemRest": 0.414, "alphaDel": 0.9, "exits": 1, "nopt": 4, "img": "q30-KG.png"}, {"order": 31, "num": "q31", "grade": "KG", "practice": false, "word": "raccoon", "pct": 56.6, "n": 498, "itemRest": 0.335, "alphaDel": 0.901, "exits": 1, "nopt": 4, "img": null}, {"order": 32, "num": "q32", "grade": "KG", "practice": false, "word": "rooster", "pct": 42.2, "n": 498, "itemRest": 0.212, "alphaDel": 0.903, "exits": 1, "nopt": 4, "img": null}]}};
+
+  let ITEMS = [];
+  let PROMPTS = {};
+  let IMG_BASE = "";
+  let currentSeason = "spring";
+
+  function escapeHtml(s) {
+    return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+
+  function boldLabels(escaped) {
+    return escaped.replace(
+      /(^|\n)(Ask|Inst[12]?|Choices|Yay\/Oops|Yay|Oops):/g,
+      (_, lead, label) => `${lead}<strong class="label">${label}:</strong>`
+    );
+  }
+
+  function renderPrompt(num) {
+    const raw = PROMPTS[num];
+    if (!raw) return `<span class="dash">—</span>`;
+    return `<div class="prompt">${boldLabels(escapeHtml(raw.trim()))}</div>`;
+  }
+
+  function updateSummary(season) {
+    const s = SEASONS[season];
+    const sum = s.summary;
+    const exited = sum.started - sum.completed;
+    const exitRate = ((exited / sum.started) * 100).toFixed(1);
+    document.getElementById("subtitle").textContent = s.subtitle;
+    document.getElementById("meta").textContent =
+      `N = ${sum.n} (item-level percent correct) · ${sum.started} starters · Raw Alpha = ${sum.rawAlpha.toFixed(3)}`;
+    document.getElementById("sumExitRate").textContent = `${exitRate}%`;
+    document.getElementById("sumExitSub").textContent =
+      `(${sum.started} − ${sum.completed}) / ${sum.started} · ${exited} children exited`;
+    document.getElementById("sumStarted").textContent = sum.started;
+    document.getElementById("sumCompleted").textContent = sum.completed;
+    document.getElementById("sumCompletedSub").textContent = `reached the end after ${s.lastItem}`;
+    document.getElementById("sumMeanPct").textContent = `${sum.meanPct.toFixed(1)}%`;
+    document.getElementById("sumMeanSub").textContent = `across the ${s.scoredCount} scored items`;
+    document.getElementById("sumAlpha").textContent = sum.rawAlpha.toFixed(3);
+    document.getElementById("notesOrder").textContent = s.adminOrder;
+    document.getElementById("notesFirstItem").textContent = s.firstItem;
+    document.getElementById("notesCompleted").textContent = sum.completed;
+    document.getElementById("notesLastItem").textContent = s.lastItem;
+    document.getElementById("notesSource").textContent = s.source;
+  }
+
+  function setSeason(season) {
+    currentSeason = season;
+    const s = SEASONS[season];
+    ITEMS = s.items;
+    PROMPTS = s.prompts;
+    IMG_BASE = s.imgBase;
+    updateSummary(season);
+    document.getElementById("btnSpring").classList.toggle("active", season === "spring");
+    document.getElementById("btnFall").classList.toggle("active", season === "fall");
+    document.getElementById("btnSpring").setAttribute("aria-pressed", season === "spring");
+    document.getElementById("btnFall").setAttribute("aria-pressed", season === "fall");
+    resort();
+  }
+
+  document.getElementById("btnSpring").addEventListener("click", () => setSeason("spring"));
+  document.getElementById("btnFall").addEventListener("click", () => setSeason("fall"));
+
+  const tbody = document.getElementById("tbody");
+  const fmt2  = v => v == null ? "—" : v.toFixed(2);
+  const fmt3  = v => v == null ? "—" : v.toFixed(3);
+
+  function pctClass(v) {
+    if (v == null) return "gray";
+    if (v < 50)   return "red";
+    if (v < 70)   return "amber";
+    return "green";
+  }
+  function irClass(v) {
+    if (v == null) return "gray";
+    if (v < 0.2) return "red";
+    if (v < 0.3) return "amber";
+    return "green";
+  }
+  function exitClass(v) {
+    if (v == null) return "gray";
+    if (v >= 50) return "red";
+    if (v >= 10) return "amber";
+    return "blue";
+  }
+  function gradeClass(g) {
+    if (g === "2YO") return "g-2yo";
+    if (g === "3YO") return "g-3yo";
+    if (g === "4YO") return "g-4yo";
+    if (g === "KG")  return "g-kg";
+    return "";
+  }
+
+  function labelFor(num) {
+    return num.toUpperCase().replace(/^Q0/, "Q").replace(/^P0/, "P");
+  }
+
+  function render(rows) {
+    tbody.innerHTML = rows.map(it => {
+      const label = labelFor(it.num);
+      const pctCell = it.pct == null
+        ? `<span class="dash">—</span>`
+        : `<span class="pill ${pctClass(it.pct)} num">${Math.round(it.pct)}%</span>`;
+      const irCell = it.itemRest == null
+        ? `<span class="dash">—</span>`
+        : `<span class="pill ${irClass(it.itemRest)} num">${fmt2(it.itemRest)}</span>`;
+      const alphaCell = it.alphaDel == null
+        ? `<span class="dash">—</span>`
+        : `<span class="num">${fmt3(it.alphaDel)}</span>`;
+      const exitsCell = it.exits == null
+        ? `<span class="dash" title="${it.note || ''}">—</span>`
+        : `<span class="pill ${exitClass(it.exits)} num">${it.exits}</span>`;
+      const gradeCell = `<span class="grade ${gradeClass(it.grade)}">${it.grade}</span>`;
+      const wordCell = it.word ? `<span class="word">${escapeHtml(it.word)}</span>` : `<span class="dash">—</span>`;
+      const imgUrl = it.img ? `${IMG_BASE}/${it.img}` : null;
+      const shotCell = imgUrl
+        ? `<div class="screenshot" style="background-image:url('${imgUrl}')" data-img="${imgUrl}" data-label="${label}" role="button" tabindex="0" aria-label="Open screenshot for ${label}"></div>`
+        : `<div class="screenshot empty">no shot</div>`;
+
+      return `
+        <tr>
+          <td class="item-name">${label}</td>
+          <td>${gradeCell}</td>
+          <td class="screenshot-cell">${shotCell}</td>
+          <td>${wordCell}</td>
+          <td class="prompt-cell">${renderPrompt(it.num)}</td>
+          <td>${pctCell}</td>
+          <td>${irCell}</td>
+          <td>${alphaCell}</td>
+          <td>${exitsCell}</td>
+        </tr>`;
+    }).join("");
+  }
+
+  let sortKey = null;
+  let sortDir = "asc";
+  const GRADE_ORDER = { "2YO": 0, "3YO": 1, "4YO": 2, "KG": 3 };
+
+  function compareItems(a, b, key) {
+    let av = a[key], bv = b[key];
+    if (key === "grade") {
+      const ao = GRADE_ORDER[av] ?? 99;
+      const bo = GRADE_ORDER[bv] ?? 99;
+      if (ao !== bo) return sortDir === "asc" ? ao - bo : bo - ao;
+      return a.order - b.order;
+    }
+    if (key === "word") {
+      av = (av || "").toLowerCase(); bv = (bv || "").toLowerCase();
+      if (av === bv) return a.order - b.order;
+      return sortDir === "asc" ? (av < bv ? -1 : 1) : (av < bv ? 1 : -1);
+    }
+    const an = av == null, bn = bv == null;
+    if (an && bn) return 0;
+    if (an) return 1;
+    if (bn) return -1;
+    return sortDir === "asc" ? av - bv : bv - av;
+  }
+
+  function resort() {
+    const key = sortKey || "itemRest";
+    if (!sortKey) { sortKey = key; sortDir = "desc"; }
+    const sorted = [...ITEMS].sort((a, b) => compareItems(a, b, key));
+    render(sorted);
+    document.querySelectorAll("thead th").forEach(th => {
+      const k = th.dataset.key;
+      if (!k) { th.removeAttribute("data-sort"); return; }
+      th.dataset.sort = k === sortKey ? (sortDir === "asc" ? "active-asc" : "active-desc") : "";
+    });
+  }
+
+  function sortBy(key) {
+    if (sortKey === key) {
+      sortDir = sortDir === "asc" ? "desc" : "asc";
+    } else {
+      sortKey = key;
+      sortDir = (key === "order" || key === "grade" || key === "word" || key === "pct" || key === "alphaDel")
+        ? "asc" : "desc";
+    }
+    resort();
+  }
+
+  document.querySelectorAll("thead th[data-key]").forEach(th => {
+    th.addEventListener("click", () => sortBy(th.dataset.key));
+  });
+
+  const modal    = document.getElementById("modal");
+  const modalImg = document.getElementById("modalImg");
+  document.getElementById("modalClose").addEventListener("click", () => modal.classList.remove("open"));
+  modal.addEventListener("click", e => { if (e.target === modal) modal.classList.remove("open"); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape") modal.classList.remove("open"); });
+
+  tbody.addEventListener("click", e => {
+    const t = e.target.closest(".screenshot");
+    if (!t || t.classList.contains("empty")) return;
+    modalImg.src = t.dataset.img;
+    modalImg.alt = `Screenshot for ${t.dataset.label}`;
+    modal.classList.add("open");
+  });
+  tbody.addEventListener("keydown", e => {
+    if (e.key !== "Enter" && e.key !== " ") return;
+    const t = e.target.closest(".screenshot");
+    if (!t || t.classList.contains("empty")) return;
+    e.preventDefault();
+    modalImg.src = t.dataset.img;
+    modalImg.alt = `Screenshot for ${t.dataset.label}`;
+    modal.classList.add("open");
+  });
+
+  setSeason("spring");
+</script>
+</body>
+</html>
